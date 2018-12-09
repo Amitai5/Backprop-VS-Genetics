@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNet", "NeuralNet\NeuralNet.csproj", "{4F485C33-3B3D-4568-B0D1-618B9CD38F05}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AEConsoleLIB", "..\..\..\GitHub\AEConsoleLIB\AEConsoleLIB\AEConsoleLIB.csproj", "{C660248F-039B-4656-8C1F-F07031F43419}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F485C33-3B3D-4568-B0D1-618B9CD38F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F485C33-3B3D-4568-B0D1-618B9CD38F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F485C33-3B3D-4568-B0D1-618B9CD38F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F485C33-3B3D-4568-B0D1-618B9CD38F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C660248F-039B-4656-8C1F-F07031F43419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C660248F-039B-4656-8C1F-F07031F43419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C660248F-039B-4656-8C1F-F07031F43419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C660248F-039B-4656-8C1F-F07031F43419}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F6B1F6CE-8A24-48A4-98F1-F5F48CD2F98D}
+	EndGlobalSection
+EndGlobal
