@@ -17,7 +17,6 @@ namespace NeuralNetSineGraphTest
 
         //Create Trainers
         long LastGeneticGenerationCount = 0;
-        Backpropagation BackPropTrainer;
         Genetics GeneticsTrainer;
 
         //Create Test Data
@@ -40,7 +39,6 @@ namespace NeuralNetSineGraphTest
             TestDataInputs = new double[TotalSteps][];
 
             //Create Trainers
-            BackPropTrainer = new Backpropagation(new NeuralNetwork(new Sigmoid(), InitializerMethod.Random, 1, 5, 5, 1), 1);
             GeneticsTrainer = new Genetics(new NeuralNetwork(new Sigmoid(), InitializerMethod.Random, 1, 5, 5, 1), 100);
 
             //Create Test Data
@@ -64,7 +62,6 @@ namespace NeuralNetSineGraphTest
             //Test Train Epoch
             while (KeepWorking)
             {
-                //double error = BackPropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
                 GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
             }
         }
@@ -76,7 +73,6 @@ namespace NeuralNetSineGraphTest
             MainGraph.Series[1].Points.Clear();
             for (double j = 0; j < GraphDomain; j += GraphStep)
             {
-                //MainGraph.Series[1].Points.AddXY(j, BackPropTrainer.Network.Compute(new double[] { j })[0]);
                 MainGraph.Series[0].Points.AddXY(j, GeneticsTrainer.BestNetwork.Compute(new double[] { j })[0]);
             }
 
