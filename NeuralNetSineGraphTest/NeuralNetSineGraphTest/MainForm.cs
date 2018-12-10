@@ -4,6 +4,7 @@ using NeuralNetLIB.LearningAlgorithms;
 using NeuralNetLIB.NetworkStructure;
 using System;
 using System.ComponentModel;
+using System.Text;
 using System.Windows.Forms;
 
 namespace NeuralNetSineGraphTest
@@ -11,21 +12,24 @@ namespace NeuralNetSineGraphTest
     public partial class MainForm : Form
     {
         //Set The Constants Of The Graph
-        public int TotalSteps = (int)Math.Round(GraphDomain / GraphStep);
-        public const double GraphDomain = 360;
-        public const double GraphStep = 1;
+        public const long GraphDomain = 360;
+        public double[] SineOfDegree(int i)
+        {
+            double radians = (i * Math.PI) / 180;
+            return new double[] { Math.Sin(radians) };
+        }
 
-        //Create Trainers
-        long LastGeneticGenerationCount = 0;
+        //Neural Network Objects
         Genetics GeneticsTrainer;
+        long LastGeneticGenerationCount = 0;
 
         //Create Test Data
-        public double[][] TestDataOutputs;
         public double[][] TestDataInputs;
+        public double[][] TestDataOutputs;
 
         //Background Worker
-        BackgroundWorker MainWorker = new BackgroundWorker();
         bool KeepWorking = true;
+        BackgroundWorker MainWorker = new BackgroundWorker();
 
         public MainForm()
         {
@@ -34,23 +38,25 @@ namespace NeuralNetSineGraphTest
 
         private void SineTestTable_Load(object sender, EventArgs e)
         {
-            //Init Test Data
-            TestDataOutputs = new double[TotalSteps][];
-            TestDataInputs = new double[TotalSteps][];
-
             //Create Trainers
             GeneticsTrainer = new Genetics(new NeuralNetwork(new Sigmoid(), InitializerMethod.Random, 1, 5, 5, 1), 100);
 
-            //Create Test Data
-            int TestDataCounter = -1;
-            for (double i = 0; i < GraphDomain; i += GraphStep)
+            //Init Test Data
+            TestDataInputs = new double[GraphDomain][];
+            TestDataOutputs = new double[GraphDomain][];
+
+            //Create Test Data & Draw The Model Sine Wave
+            for (int i = 0; i < GraphDomain; i++)
             {
-                TestDataCounter++;
-                double CorrectOutputValue = Math.Sin(Math.PI * i / 180);
-                TestDataInputs[TestDataCounter] = new double[] { i };
-                MainGraph.Series[2].Points.AddXY(i, CorrectOutputValue);
-                TestDataOutputs[TestDataCounter] = new double[] { CorrectOutputValue };
+                TestDataOutputs[i] = SineOfDegree(i);
+                TestDataInputs[i] = new double[] { i };
+
+                //Draw Model Sine Wave
+                MainGraph.Series[2].Points.AddXY(i, TestDataOutputs[i][0]);
             }
+
+            //Start Training
+            GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
 
             //Start The Background Work
             MainWorker.DoWork += BackgroundWorker_DoWork;
@@ -68,22 +74,25 @@ namespace NeuralNetSineGraphTest
 
         private void DrawPointsTimer_Tick(object sender, EventArgs e)
         {
-            //Draw The Backprop
+            //Draw The Neural Network's Graph
             MainGraph.Series[0].Points.Clear();
-            MainGraph.Series[1].Points.Clear();
-            for (double j = 0; j < GraphDomain; j += GraphStep)
+            for (int i = 0; i < GraphDomain; i += 1)
             {
-                MainGraph.Series[0].Points.AddXY(j, GeneticsTrainer.BestNetwork.Compute(new double[] { j })[0]);
+                MainGraph.Series[0].Points.AddXY(i, GeneticsTrainer.BestNetwork.Compute(new double[] { i })[0]);
             }
 
             //Make Calculations
+            double BestNetworkFitness = ((GeneticNeuralNetwork)GeneticsTrainer.BestNetwork).Fitness;
             double GenPerSec = (GeneticsTrainer.GenerationCount - LastGeneticGenerationCount) * 0.75;
 
+            //Create Debug String
+            StringBuilder DisplayTextBuilder = new StringBuilder($"Genetics Algorithm: {Environment.NewLine}{Environment.NewLine}");
+            DisplayTextBuilder.AppendLine($"Best Network Error: {BestNetworkFitness: 0.00000}");
+            DisplayTextBuilder.AppendLine($"Current Gen: {GeneticsTrainer.GenerationCount}");
+            DisplayTextBuilder.AppendLine($"G/S: {GenPerSec:0.00}");
+
             //Display To Screen
-            DebugInfoBox.Text = $"Genetics Algorithm: {Environment.NewLine}{Environment.NewLine}";
-            DebugInfoBox.AppendText($"Generation Count: {GeneticsTrainer.GenerationCount}{Environment.NewLine}");
-            DebugInfoBox.AppendText($"Generations Per Seccond: {GenPerSec:0.00}{Environment.NewLine}");
-            DebugInfoBox.AppendText($"Best Network Error: {((GeneticNeuralNetwork)GeneticsTrainer.BestNetwork).Fitness}{Environment.NewLine}");
+            DebugInfoBox.Text = DisplayTextBuilder.ToString();
 
             //Save Last States
             LastGeneticGenerationCount = GeneticsTrainer.GenerationCount;

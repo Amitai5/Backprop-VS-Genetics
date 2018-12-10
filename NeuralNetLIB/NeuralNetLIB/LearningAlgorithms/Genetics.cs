@@ -36,8 +36,8 @@ namespace NeuralNetLIB.LearningAlgorithms
             for (int j = 0; j < totalNetCount; j++)
             {
                 GeneticNeuralNetwork NewNetwork = new GeneticNeuralNetwork(ActivationFunc, InitMethod, 1, neuronCounts);
-                NewNetwork.Randomize();
                 NeuralNets[j] = NewNetwork;
+                NeuralNets[j].Randomize();
             }
         }
 
@@ -50,15 +50,12 @@ namespace NeuralNetLIB.LearningAlgorithms
             });
             NeuralNets = NeuralNets.OrderBy(x => x.Fitness).ToArray();
 
-            //Create 75% New Networks
-            int QuarterMark = NeuralNets.Length / 4;
-            Parallel.For(QuarterMark, NeuralNets.Length - QuarterMark, j =>
+            //Create 50% New Networks
+            int HalfMark = NeuralNets.Length / 2;
+            Parallel.For(HalfMark, NeuralNets.Length, j =>
             {
-                GeneticNeuralNetwork NextBestNetwork = NeuralNets[j - QuarterMark + 1];
-                GeneticNeuralNetwork BetterNetwork = NeuralNets[j - QuarterMark];
                 GeneticNeuralNetwork CurrentNet = NeuralNets[j];
-
-                CurrentNet.CrossOver(BetterNetwork, NextBestNetwork);
+                CurrentNet.Randomize();
             });
 
             //Calculate Fitnesses & Sort
