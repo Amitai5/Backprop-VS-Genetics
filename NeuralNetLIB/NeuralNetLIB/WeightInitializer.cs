@@ -4,12 +4,13 @@ namespace NeuralNetLIB
 {
     public class WeightInitializer
     {
-        private static readonly Random Rand = new Random();
+        private readonly Random RandGen;
         public InitializerMethod InitMethod { get; private set; }
 
         public WeightInitializer(InitializerMethod method)
         {
             InitMethod = method;
+            RandGen = new Random();
         }
 
         public double GetInitValue(double min, double max)
@@ -24,7 +25,7 @@ namespace NeuralNetLIB
 
         private double RandomInit(double min, double max)
         {
-            return Rand.NextDouble() * (max - min) + min;
+            return RandGen.NextDouble() * (max - min) + min;
         }
     }
 }

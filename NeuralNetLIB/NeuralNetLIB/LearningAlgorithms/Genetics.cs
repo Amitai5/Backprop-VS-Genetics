@@ -18,9 +18,10 @@ namespace NeuralNetLIB.LearningAlgorithms
         public long GenerationCount { get; private set; }
         public double LearningRate { get; private set; }
 
-        public Genetics(NeuralNetwork modelNetwork, int totalNetCount)
+        public Genetics(NeuralNetwork modelNetwork, int totalNetCount, double learningRate = 0.5)
         {
             //Store Neural Network Data
+            LearningRate = learningRate;
             ActivationFunc = modelNetwork.ActivationFunc;
             InitMethod = modelNetwork.WeightInit.InitMethod;
 
@@ -35,8 +36,7 @@ namespace NeuralNetLIB.LearningAlgorithms
             NeuralNets = new GeneticNeuralNetwork[totalNetCount];
             for (int j = 0; j < totalNetCount; j++)
             {
-                GeneticNeuralNetwork NewNetwork = new GeneticNeuralNetwork(ActivationFunc, InitMethod, 1, neuronCounts);
-                NeuralNets[j] = NewNetwork;
+                NeuralNets[j] = new GeneticNeuralNetwork(ActivationFunc, InitMethod, 1, neuronCounts);
                 NeuralNets[j].Randomize();
             }
         }
@@ -50,12 +50,19 @@ namespace NeuralNetLIB.LearningAlgorithms
             });
             NeuralNets = NeuralNets.OrderBy(x => x.Fitness).ToArray();
 
-            //Create 50% New Networks
-            int HalfMark = NeuralNets.Length / 2;
-            Parallel.For(HalfMark, NeuralNets.Length, j =>
+            //Cross Over 33% Of Nets & Randomize The Other 33%
+            int OneThirdPopulation = NeuralNets.Length / 3;
+            Parallel.For(OneThirdPopulation, NeuralNets.Length, j =>
             {
                 GeneticNeuralNetwork CurrentNet = NeuralNets[j];
-                CurrentNet.Randomize();
+                if (j < 2 * OneThirdPopulation)
+                {
+                    CurrentNet.CrossOver(NeuralNets[j - NeuralNets.Length / 3], LearningRate);
+                }
+                else
+                {
+                    CurrentNet.Randomize();
+                }
             });
 
             //Calculate Fitnesses & Sort

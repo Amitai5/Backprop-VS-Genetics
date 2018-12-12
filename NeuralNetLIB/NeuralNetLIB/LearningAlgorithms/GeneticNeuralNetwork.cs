@@ -17,31 +17,24 @@ namespace NeuralNetLIB.LearningAlgorithms
             Fitness = 0;
         }
 
-        public void CrossOver(GeneticNeuralNetwork BestNetwork, GeneticNeuralNetwork GoodNetwork)
+        public void CrossOver(GeneticNeuralNetwork BestNetwork, double LearningRate)
         {
             Parallel.For(0, NeuralLayers.Length, i =>
              {
-                 Parallel.For(0, NeuralLayers[i].NeuronLength, j =>
+                 for (int j = 0; j < NeuralLayers[i].NeuronLength; j++)
                  {
                      //Get The Neurons
                      Neuron CurrentNeuron = NeuralLayers[i][j];
                      Neuron BestNetworkNeuron = BestNetwork.NeuralLayers[i][j];
-                     Neuron GoodNetworkNeuron = GoodNetwork.NeuralLayers[i][j];
 
                      for (int h = 0; h < CurrentNeuron.InputDendrites.Length / 2; h++)
                      {
                          CurrentNeuron.InputDendrites[h] = BestNetworkNeuron.InputDendrites[h];
-                         CurrentNeuron.InputDendrites[h] += WeightInit.GetInitValue(-6, 6);
+                         CurrentNeuron.InputDendrites[h] += WeightInit.GetInitValue(-6, 6) * LearningRate;
                      }
-
-                     for (int k = CurrentNeuron.InputDendrites.Length / 2; k < CurrentNeuron.InputDendrites.Length; k++)
-                     {
-                         CurrentNeuron.InputDendrites[k] = GoodNetworkNeuron.InputDendrites[k];
-                         CurrentNeuron.InputDendrites[k] += WeightInit.GetInitValue(-6, 6);
-                     }
-                     CurrentNeuron.BiasValue = (BestNetworkNeuron.BiasValue + GoodNetworkNeuron.BiasValue) / 2;
-                     CurrentNeuron.BiasValue += WeightInit.GetInitValue(-6, 6);
-                 });
+                     CurrentNeuron.BiasValue = (BestNetworkNeuron.BiasValue + CurrentNeuron.BiasValue) / 2;
+                     CurrentNeuron.BiasValue += WeightInit.GetInitValue(-6, 6) * LearningRate;
+                 }
              });
         }
     }
