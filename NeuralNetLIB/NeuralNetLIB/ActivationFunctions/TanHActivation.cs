@@ -4,9 +4,9 @@ namespace NeuralNetLIB.ActivationFunctions
 {
     public class TanH : IActivationFunc
     {
-        public bool UseSecondDerivative => true;
-        public double Min => -6;
-        public double Max => 6;
+        public bool DerrivativeRequiresOutput => true;
+        public double Min => -5;
+        public double Max => 5;
 
         public double Derivative(double x)
         {

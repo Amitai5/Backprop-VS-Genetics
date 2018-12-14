@@ -4,7 +4,7 @@ namespace NeuralNetLIB.ActivationFunctions
 {
     public class ReLU : IActivationFunc
     {
-        public bool UseSecondDerivative => false;
+        public bool DerrivativeRequiresOutput => false;
         public double Min => -6;
         public double Max => 6;
 

@@ -1,5 +1,4 @@
-﻿using NeuralNetLIB;
-using NeuralNetLIB.ActivationFunctions;
+﻿using NeuralNetLIB.ActivationFunctions;
 using NeuralNetLIB.LearningAlgorithms;
 using NeuralNetLIB.NetworkStructure;
 using System;
@@ -40,7 +39,7 @@ namespace NeuralNetSineGraphTest
         private void SineTestTable_Load(object sender, EventArgs e)
         {
             //Create Trainers
-            GeneticsTrainer = new Genetics(new NeuralNetwork(new TanH(), InitializerMethod.Random, 1, 20, 10, 1), 100, learningRate: 0.75);
+            GeneticsTrainer = new Genetics(new NeuralNetwork(new TanH(), 1, 20, 1), totalNetCount: 100, mutationRate: 0.05);
 
             //Init Test Data & Store Time Per Update
             TestDataInputs = new double[GraphDomain][];

@@ -8,5 +8,10 @@ namespace NeuralNetLIB
         {
             return val.CompareTo(min) < 0 ? min : val.CompareTo(max) > 0 ? max : val;
         }
+
+        public static double NextDouble(this Random RandGen, double min, double max)
+        {
+            return RandGen.NextDouble() * (max - min) + min;
+        }
     }
 }

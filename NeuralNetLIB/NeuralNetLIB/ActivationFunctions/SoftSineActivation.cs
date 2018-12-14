@@ -2,7 +2,7 @@
 
 namespace NeuralNetLIB.ActivationFunctions
 {
-    public class LeakyReLU : IActivationFunc
+    public class SoftSine : IActivationFunc
     {
         public bool DerrivativeRequiresOutput => false;
         public double Min => -6;
@@ -11,14 +11,7 @@ namespace NeuralNetLIB.ActivationFunctions
         public double Derivative(double x)
         {
             //The Derrivative Value Of The Point In Which You Are AT
-            if (x >= 1)
-            {
-                return 1;
-            }
-            else
-            {
-                return 0.01;
-            }
+            return 1 / Math.Pow(1 + Math.Abs(x), 2);
         }
 
         public double Derivative2(double y)
@@ -28,12 +21,8 @@ namespace NeuralNetLIB.ActivationFunctions
 
         public double Function(double x)
         {
-            //The ReLU Function Itself
-            if (x < 0)
-            {
-                return 0.01 * x;
-            }
-            return x;
+            //The SoftSine Function Itself
+            return x / (1 + Math.Abs(x));
         }
     }
 }
