@@ -4,7 +4,7 @@ namespace NeuralNetLIB.ActivationFunctions
 {
     public class Sigmoid : IActivationFunc
     {
-        public bool UseSecondDerivative => true;
+        public bool DerrivativeRequiresOutput => true;
         public double Min => -6;
         public double Max => 6;
 
