@@ -50,7 +50,7 @@
             // DrawPointsTimer
             // 
             this.DrawPointsTimer.Enabled = true;
-            this.DrawPointsTimer.Interval = 750;
+            this.DrawPointsTimer.Interval = 1500;
             this.DrawPointsTimer.Tick += new System.EventHandler(this.DrawPointsTimer_Tick);
             // 
             // MainSplitter
@@ -67,8 +67,8 @@
             // 
             this.MainSplitter.Panel2.Controls.Add(this.PausePlayBTN);
             this.MainSplitter.Panel2.Controls.Add(this.DebugInfoBox);
-            this.MainSplitter.Size = new System.Drawing.Size(2271, 1035);
-            this.MainSplitter.SplitterDistance = 1801;
+            this.MainSplitter.Size = new System.Drawing.Size(2350, 1247);
+            this.MainSplitter.SplitterDistance = 1805;
             this.MainSplitter.TabIndex = 0;
             // 
             // MainGraph
@@ -87,6 +87,8 @@
             chartArea1.Name = "MainArea";
             this.MainGraph.ChartAreas.Add(chartArea1);
             this.MainGraph.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend1.AutoFitMinFontSize = 12;
+            legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
             legend1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             legend1.IsTextAutoFit = false;
             legend1.Name = "Algorithms";
@@ -123,7 +125,7 @@
             this.MainGraph.Series.Add(series1);
             this.MainGraph.Series.Add(series2);
             this.MainGraph.Series.Add(series3);
-            this.MainGraph.Size = new System.Drawing.Size(1801, 1035);
+            this.MainGraph.Size = new System.Drawing.Size(1805, 1247);
             this.MainGraph.TabIndex = 2;
             title1.Alignment = System.Drawing.ContentAlignment.BottomLeft;
             title1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -135,9 +137,9 @@
             // 
             this.PausePlayBTN.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PausePlayBTN.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PausePlayBTN.Location = new System.Drawing.Point(0, 531);
+            this.PausePlayBTN.Location = new System.Drawing.Point(0, 800);
             this.PausePlayBTN.Name = "PausePlayBTN";
-            this.PausePlayBTN.Size = new System.Drawing.Size(466, 504);
+            this.PausePlayBTN.Size = new System.Drawing.Size(541, 447);
             this.PausePlayBTN.TabIndex = 1;
             this.PausePlayBTN.Text = "Pause";
             this.PausePlayBTN.UseVisualStyleBackColor = true;
@@ -150,21 +152,21 @@
             this.DebugInfoBox.Location = new System.Drawing.Point(0, 0);
             this.DebugInfoBox.Name = "DebugInfoBox";
             this.DebugInfoBox.ReadOnly = true;
-            this.DebugInfoBox.Size = new System.Drawing.Size(466, 531);
+            this.DebugInfoBox.Size = new System.Drawing.Size(541, 800);
             this.DebugInfoBox.TabIndex = 0;
             this.DebugInfoBox.Text = "";
             // 
-            // SineTestTable
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(18F, 36F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2271, 1035);
+            this.ClientSize = new System.Drawing.Size(2350, 1247);
             this.Controls.Add(this.MainSplitter);
             this.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "SineTestTable";
+            this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Backpropagation VS. Genetics: Sine Wave";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.SineTestTable_Load);
             this.MainSplitter.Panel1.ResumeLayout(false);
             this.MainSplitter.Panel2.ResumeLayout(false);
@@ -179,7 +181,7 @@
         private System.Windows.Forms.Timer DrawPointsTimer;
         private System.Windows.Forms.SplitContainer MainSplitter;
         private System.Windows.Forms.DataVisualization.Charting.Chart MainGraph;
-        private System.Windows.Forms.RichTextBox DebugInfoBox;
         private System.Windows.Forms.Button PausePlayBTN;
+        private System.Windows.Forms.RichTextBox DebugInfoBox;
     }
 }

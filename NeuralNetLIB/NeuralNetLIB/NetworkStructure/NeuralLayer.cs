@@ -25,20 +25,17 @@ namespace NeuralNetLIB.NetworkStructure
         }
         public Neuron[] Neurons { get; private set; }
         public int NeuronLength { get => Neurons.Length; }
-
-        public WeightInitializer WeightInit { get; private set; }
         public IActivationFunc ActivationFunc { get; private set; }
 
-        public NeuralLayer(IActivationFunc activationFunc, WeightInitializer weightInitializer, int inputCount, int neuronCount)
+        public NeuralLayer(IActivationFunc activationFunc, int inputCount, int neuronCount)
         {
-            WeightInit = weightInitializer;
             ActivationFunc = activationFunc;
 
             //Create The Neurons
             Neurons = new Neuron[neuronCount];
             for (int i = 0; i < neuronCount; i++)
             {
-                Neurons[i] = new Neuron(ActivationFunc, WeightInit, inputCount);
+                Neurons[i] = new Neuron(ActivationFunc, inputCount);
             }
         }
 

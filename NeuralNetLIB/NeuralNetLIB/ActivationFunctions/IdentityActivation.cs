@@ -2,7 +2,7 @@
 {
     public class IdentityActivation : IActivationFunc
     {
-        public bool UseSecondDerivative => false;
+        public bool DerrivativeRequiresOutput => false;
         public double Min => double.MinValue;
         public double Max => double.MaxValue;
 
