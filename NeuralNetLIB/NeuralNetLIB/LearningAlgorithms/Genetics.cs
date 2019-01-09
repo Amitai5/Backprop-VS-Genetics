@@ -12,6 +12,13 @@ namespace NeuralNetLIB.LearningAlgorithms
         public IActivationFunc ActivationFunc { get; private set; }
         public NeuralNetwork BestNetwork { get; private set; }
         private GeneticNeuralNetwork[] NeuralNets;
+        public double BestNetworkFitness
+        {
+            get
+            {
+                return NeuralNets[0].Fitness;
+            }
+        }
 
         //Store The Training Data
         public double MutationRate { get; private set; }
