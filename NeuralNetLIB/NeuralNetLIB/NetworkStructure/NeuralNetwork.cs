@@ -1,4 +1,5 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
+using System;
 
 namespace NeuralNetLIB.NetworkStructure
 {
@@ -11,6 +12,7 @@ namespace NeuralNetLIB.NetworkStructure
                 return NeuralLayers[i];
             }
         }
+        public int ExpectedInputCount { get; private set; }
         public int LayerCount { get => NeuralLayers.Length; }
         public NeuralLayer[] NeuralLayers { get; private set; }
         public IActivationFunc ActivationFunc { get; private set; }
@@ -22,6 +24,7 @@ namespace NeuralNetLIB.NetworkStructure
         {
             //Create Neural Network
             ActivationFunc = activationFunc;
+            ExpectedInputCount = inputCount;
             NeuralLayers = new NeuralLayer[neuronCounts.Length];
             NeuralLayers[0] = new NeuralLayer(ActivationFunc, inputCount, neuronCounts[0]); //Not Storing The Input Layer
             for (int i = 1; i < neuronCounts.Length; i++)
@@ -40,11 +43,11 @@ namespace NeuralNetLIB.NetworkStructure
             return outputs;
         }
 
-        public void Randomize()
+        public void Randomize(Random Rand)
         {
             for (int i = 0; i < NeuralLayers.Length; i++)
             {
-                NeuralLayers[i].Randomize();
+                NeuralLayers[i].Randomize(Rand);
             }
         }
     }

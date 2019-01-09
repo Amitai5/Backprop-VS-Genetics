@@ -1,8 +1,6 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
 using NeuralNetLIB.NetworkStructure;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NeuralNetLIB.LearningAlgorithms
 {
@@ -21,12 +19,14 @@ namespace NeuralNetLIB.LearningAlgorithms
         }
 
         //Store The Training Data
+        public Random Rand { get; private set; }
         public double MutationRate { get; private set; }
         public long GenerationCount { get; private set; }
 
-        public Genetics(NeuralNetwork modelNetwork, int totalNetCount, double mutationRate = 0.05)
+        public Genetics(Random rand, NeuralNetwork modelNetwork, int totalNetCount, double mutationRate = 0.05)
         {
             //Store Neural Network Data
+            Rand = rand;
             MutationRate = mutationRate;
             ActivationFunc = modelNetwork.ActivationFunc;
 
@@ -41,41 +41,34 @@ namespace NeuralNetLIB.LearningAlgorithms
             NeuralNets = new GeneticNeuralNetwork[totalNetCount];
             for (int j = 0; j < totalNetCount; j++)
             {
-                NeuralNets[j] = new GeneticNeuralNetwork(ActivationFunc, 1, neuronCounts);
-                NeuralNets[j].Randomize();
+                NeuralNets[j] = new GeneticNeuralNetwork(ActivationFunc, modelNetwork.ExpectedInputCount, neuronCounts);
+                NeuralNets[j].Randomize(rand);
             }
         }
 
         public void TrainGeneration(double[][] inputs, double[][] outputs)
         {
-            //Calculate Fitnesses
-            Parallel.For(0, NeuralNets.Length, i =>
-            {
-                CalculateFitness(NeuralNets[i], inputs, outputs);
-            });
-            NeuralNets = NeuralNets.OrderBy(x => x.Fitness).ToArray();
-
             //Cross Over 80% Of Nets & Randomize 10%
             int OneTenthPopulation = NeuralNets.Length / 10;
-            Parallel.For(OneTenthPopulation, NeuralNets.Length, j =>
+            for (int j = OneTenthPopulation; j < NeuralNets.Length; j++)
             {
                 GeneticNeuralNetwork CurrentNet = NeuralNets[j];
                 if (j < 9 * OneTenthPopulation)
                 {
-                    CurrentNet.CrossOverAndMutate(NeuralNets[j % 10], MutationRate);
+                    CurrentNet.CrossOverAndMutate(NeuralNets[j % OneTenthPopulation], MutationRate, Rand);
                 }
                 else
                 {
-                    CurrentNet.Randomize();
+                    CurrentNet.Randomize(Rand);
                 }
-            });
+            }
 
             //Calculate Fitnesses & Sort
-            Parallel.For(0, NeuralNets.Length, i =>
+            for (int i = 0; i < NeuralNets.Length; i++)
             {
                 CalculateFitness(NeuralNets[i], inputs, outputs);
-            });
-            NeuralNets = NeuralNets.OrderBy(x => x.Fitness).ToArray();
+            }
+            Array.Sort(NeuralNets, (a, b) => a.Fitness.CompareTo(b.Fitness));
             BestNetwork = NeuralNets[0];
             GenerationCount++;
         }
@@ -85,10 +78,10 @@ namespace NeuralNetLIB.LearningAlgorithms
             double MeanAbsoluteError = 0;
             for (int i = 0; i < inputs.Length; i++)
             {
-                double[] Output = neuralNetwork.Compute(inputs[i]);
-                MeanAbsoluteError += Math.Abs(desiredOutputs[i][0] - Output[0]);
+                double Output = neuralNetwork.Compute(inputs[i])[0];
+                MeanAbsoluteError += Math.Pow(desiredOutputs[i][0] - Output, 2);
             }
-            neuralNetwork.Fitness = MeanAbsoluteError /= inputs.Length;
+            neuralNetwork.Fitness = MeanAbsoluteError / inputs.Length;
         }
     }
 }

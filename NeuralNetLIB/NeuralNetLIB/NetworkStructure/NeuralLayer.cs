@@ -1,4 +1,5 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
+using System;
 
 namespace NeuralNetLIB.NetworkStructure
 {
@@ -48,11 +49,11 @@ namespace NeuralNetLIB.NetworkStructure
             return Outputs;
         }
 
-        public void Randomize()
+        public void Randomize(Random Rand)
         {
             for (int i = 0; i < Neurons.Length; i++)
             {
-                Neurons[i].Randomize();
+                Neurons[i].Randomize(Rand);
             }
         }
     }

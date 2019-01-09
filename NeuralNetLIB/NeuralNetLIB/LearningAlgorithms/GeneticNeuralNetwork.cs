@@ -9,15 +9,14 @@ namespace NeuralNetLIB.LearningAlgorithms
     {
         //Save The Fitness
         public double Fitness { get; set; }
-        private readonly Random Rand = new Random();
 
         public GeneticNeuralNetwork(IActivationFunc activationFunc, int inputCount, params int[] neuronCounts)
             : base(activationFunc, inputCount, neuronCounts)
         {
-            Fitness = 0;
+            Fitness = Double.PositiveInfinity;
         }
 
-        public void CrossOverAndMutate(GeneticNeuralNetwork BetterNetwork, double MutationRate)
+        public void CrossOverAndMutate(GeneticNeuralNetwork BetterNetwork, double MutationRate, Random Rand)
         {
             Parallel.For(0, NeuralLayers.Length, i =>
             {
@@ -45,29 +44,37 @@ namespace NeuralNetLIB.LearningAlgorithms
                     {
                         if (Rand.NextDouble() < MutationRate)
                         {
-                            CurrentNeuron.InputDendrites[h] *= Rand.NextDouble(0.5, 1.5);
-
-                            //"Flip A Coin" To See If We Should Flip Sign
-                            if (Rand.NextDouble() < MutationRate)
-                            {
-                                CurrentNeuron.InputDendrites[h] *= -1;
-                            }
+                            Mutate(ref CurrentNeuron.InputDendrites[h], Rand);
                         }
                     }
 
                     //Mutate The Bias
                     if (Rand.NextDouble() < MutationRate)
                     {
-                        CurrentNeuron.BiasValue *= Rand.NextDouble(0.5, 1.5);
-
-                        //"Flip A Coin" To See If We Should Flip Sign
-                        if (Rand.NextDouble() < MutationRate)
-                        {
-                            CurrentNeuron.BiasValue *= -1;
-                        }
+                        Mutate(ref CurrentNeuron.BiasValue, Rand);
                     }
                 }
             });
+        }
+
+        private void Mutate(ref double weight, Random Rand)
+        {
+            switch (Rand.Next(4))
+            {
+                case 0: // randomize
+                    weight = Rand.NextDouble(ActivationFunc.DendriteMinGen, ActivationFunc.DendriteMaxGen);
+                    break;
+                case 1: // add/subtract
+                    weight += Rand.NextDouble(-1, 1);
+                    break;
+                case 2: // flip sign
+                    weight *= -1;
+                    break;
+                default:
+                case 3: // scale
+                    weight *= Rand.NextDouble(0.5, 1.5);
+                    break;
+            }
         }
     }
 }
