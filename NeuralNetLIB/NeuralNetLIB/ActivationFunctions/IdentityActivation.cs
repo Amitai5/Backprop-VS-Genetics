@@ -3,8 +3,8 @@
     public class IdentityActivation : IActivationFunc
     {
         public bool DerrivativeRequiresOutput => false;
-        public double Min => double.MinValue;
-        public double Max => double.MaxValue;
+        public double DendriteMinGen => -0.5;
+        public double DendriteMaxGen => 0.5;
 
         public double Derivative(double x)
         {

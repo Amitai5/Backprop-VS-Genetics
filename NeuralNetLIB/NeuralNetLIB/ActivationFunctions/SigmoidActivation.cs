@@ -5,8 +5,8 @@ namespace NeuralNetLIB.ActivationFunctions
     public class Sigmoid : IActivationFunc
     {
         public bool DerrivativeRequiresOutput => true;
-        public double Min => -6;
-        public double Max => 6;
+        public double DendriteMinGen => -5;
+        public double DendriteMaxGen => 5;
 
         public double Derivative(double x)
         {

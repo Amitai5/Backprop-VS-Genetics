@@ -27,7 +27,7 @@ namespace NeuralNetXORTest
             };
 
             NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 2, 2, 1);
-            Backpropagation BackpropTrainer = new Backpropagation(ModelNetwork, 0.35);
+            Backpropagation BackpropTrainer = new Backpropagation(ModelNetwork, 0.25);
             Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 100);
             double NeuralNetworkTargetError = 0.05;
             Console.CursorVisible = false;

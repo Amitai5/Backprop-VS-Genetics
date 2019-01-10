@@ -3,8 +3,8 @@
     public class BackpropagationDelta
     {
         public double PartialDerivative;
-        public double BiasUpdate;
         public double[] WeightUpdates;
+        public double BiasUpdate;
 
         public BackpropagationDelta(int numberOfWeights)
         {

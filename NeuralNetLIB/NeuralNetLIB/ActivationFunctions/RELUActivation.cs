@@ -5,8 +5,8 @@ namespace NeuralNetLIB.ActivationFunctions
     public class ReLU : IActivationFunc
     {
         public bool DerrivativeRequiresOutput => false;
-        public double Min => -6;
-        public double Max => 6;
+        public double DendriteMinGen => -6;
+        public double DendriteMaxGen => 6;
 
         public double Derivative(double x)
         {

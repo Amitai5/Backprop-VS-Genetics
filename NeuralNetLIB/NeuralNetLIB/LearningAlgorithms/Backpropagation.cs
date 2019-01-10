@@ -19,7 +19,7 @@ namespace NeuralNetLIB.LearningAlgorithms
             LearningRate = learningRate.Clamp(0, 1);
             Deltas = new Dictionary<Neuron, BackpropagationDelta>();
 
-            Network.Randomize();
+            Network.Randomize(new Random());
             for (int l = 0; l < Network.NeuralLayers.Length; l++)
             {
                 NeuralLayer Layer = Network.NeuralLayers[l];
@@ -139,7 +139,7 @@ namespace NeuralNetLIB.LearningAlgorithms
             for (int i = 0; i < inputs.Length; i++)
             {
                 double[] Output = Network.Compute(inputs[i]);
-                MeanAbsoluteError += desiredOutputs[i].Zip(Output, (e, a) => Math.Abs(e - a)).Average();
+                MeanAbsoluteError += desiredOutputs[i].Zip(Output, (e, a) => Math.Pow(e - a, 2)).Average();
             }
             MeanAbsoluteError /= inputs.Length;
             return MeanAbsoluteError;

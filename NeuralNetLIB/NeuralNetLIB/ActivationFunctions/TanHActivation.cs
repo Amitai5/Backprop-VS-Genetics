@@ -5,8 +5,8 @@ namespace NeuralNetLIB.ActivationFunctions
     public class TanH : IActivationFunc
     {
         public bool DerrivativeRequiresOutput => true;
-        public double Min => -5;
-        public double Max => 5;
+        public double DendriteMinGen => -5;
+        public double DendriteMaxGen => 5;
 
         public double Derivative(double x)
         {

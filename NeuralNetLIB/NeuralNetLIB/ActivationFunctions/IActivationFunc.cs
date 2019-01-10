@@ -2,8 +2,8 @@
 {
     public interface IActivationFunc
     {
-        double Min { get; }
-        double Max { get; }
+        double DendriteMinGen { get; }
+        double DendriteMaxGen { get; }
 
         double Function(double x);
         double Derivative(double x);

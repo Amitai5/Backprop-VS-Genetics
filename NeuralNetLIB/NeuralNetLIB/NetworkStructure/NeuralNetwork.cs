@@ -16,9 +16,7 @@ namespace NeuralNetLIB.NetworkStructure
         public int LayerCount { get => NeuralLayers.Length; }
         public NeuralLayer[] NeuralLayers { get; private set; }
         public IActivationFunc ActivationFunc { get; private set; }
-
         public NeuralLayer OutputLayer => NeuralLayers[NeuralLayers.Length - 1];
-        public double[] OutputValues => NeuralLayers[NeuralLayers.Length - 1].Outputs;
 
         public NeuralNetwork(IActivationFunc activationFunc, int inputCount, params int[] neuronCounts)
         {
