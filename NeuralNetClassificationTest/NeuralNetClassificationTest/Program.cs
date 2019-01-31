@@ -20,24 +20,27 @@ namespace NeuralNetClassificationTest
             Dictionary<double[], string> NewData = new Dictionary<double[], string>
             {
                 //  Input Format: 
-                //      # of Legs, Has Scales, Is Cold Blooded, 
-                { new double[] { 0, 0, 1}, "Shark" },
-                { new double[] { 2, 0, 0}, "Human" },
-                { new double[] { 0, 1, 1}, "Salmon" },
-                { new double[] { 5, 0, 1}, "Starfish" },
+                //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing
+                { new double[] { 0, 1, 1, 1 }, "Tuna" },
+                { new double[] { 4, 1, 0, 1 }, "Frog" },
+                { new double[] { 4, 1, 1, 0 }, "Gecko" },
+                { new double[] { 2, 0, 0, 0 }, "Human" },
+                { new double[] { 0, 1, 1, 1 }, "Salmon" },
+                { new double[] { 5, 0, 1, 1 }, "Starfish" },
+                { new double[] { 4, 1, 1, 0 }, "Chameleon" },
             };
             Dictionary<double[], string> TestData = new Dictionary<double[], string>
             {
                 //  Input Format: 
-                //      # of Legs, Has Scales, Is Cold Blooded, 
-                { new double[] { 4, 0, 0 }, "Corgi" },
-                { new double[] { 2, 0, 0 }, "Seagull" },
-                { new double[] { 2, 1, 1 }, "Sea Turtle" },
-                { new double[] { 0, 0, 1 }, "Jelly Fish" },
-                { new double[] { 8, 0, 1 }, "Black Widow" },
-                { new double[] { 4, 1, 1 }, "Komodo Dragon" },
-                { new double[] { 0, 1, 1 }, "Burmese Python" },
-                { new double[] { 4, 1, 1 }, "Nile Crocodile" }
+                //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing
+                { new double[] { 4, 0, 0, 0 }, "Corgi" },
+                { new double[] { 2, 0, 0, 0 }, "Seagull" },
+                { new double[] { 2, 1, 1, 0 }, "Sea Turtle" },
+                { new double[] { 0, 0, 1, 1 }, "Jelly Fish" },
+                { new double[] { 8, 0, 1, 0 }, "Black Widow" },
+                { new double[] { 4, 1, 1, 0 }, "Komodo Dragon" },
+                { new double[] { 0, 1, 1, 0 }, "Burmese Python" },
+                { new double[] { 4, 1, 1, 0 }, "Nile Crocodile" },
             };
 
             double[][] TestDataInputs = new double[TestData.Keys.Count][];
@@ -54,24 +57,24 @@ namespace NeuralNetClassificationTest
             };
             TestData.Keys.CopyTo(TestDataInputs, 0);
 
-            NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 3, 10, 1);
+            NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 4, 10, 1);
             Backpropagation BackpropTrainer = new Backpropagation(ModelNetwork);
             Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 25);
-            double NeuralNetworkTargetError = 0.01;
+            double FinalEpochGenCount = 125;
             Console.CursorVisible = false;
 
             //Train Both At Least Once
             double BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
             GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
 
-            while (BackpropError > NeuralNetworkTargetError || GeneticsTrainer.BestNetworkFitness > NeuralNetworkTargetError)
+            while (BackpropTrainer.EpochCount < FinalEpochGenCount || GeneticsTrainer.GenerationCount < FinalEpochGenCount)
             {
                 //Train Neural Networks Only Until It Reaches The Goal Error Amount
-                if (BackpropError > NeuralNetworkTargetError)
+                if (BackpropTrainer.EpochCount < FinalEpochGenCount)
                 {
                     BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
                 }
-                if (GeneticsTrainer.BestNetworkFitness > NeuralNetworkTargetError)
+                if (GeneticsTrainer.GenerationCount < FinalEpochGenCount)
                 {
                     GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
                 }
@@ -100,7 +103,7 @@ namespace NeuralNetClassificationTest
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write($"{SingleTestData.Value} => ");
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"{Math.Round(GeneticsTrainer.BestNetwork.Compute(SingleTestData.Key)[0], 0)}");
+                Console.WriteLine($"{Math.Round(BackpropTrainer.Network.Compute(SingleTestData.Key)[0], 0)}");
             }
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine($"----------New Data----------");
@@ -109,7 +112,7 @@ namespace NeuralNetClassificationTest
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.Write($"{SingleTestData.Value} => ");
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine($"{Math.Round(GeneticsTrainer.BestNetwork.Compute(SingleTestData.Key)[0], 0)}");
+                Console.WriteLine($"{Math.Round(BackpropTrainer.Network.Compute(SingleTestData.Key)[0], 0)}");
             }
 
             //Separator
