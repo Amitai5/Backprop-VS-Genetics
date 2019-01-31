@@ -38,7 +38,7 @@
             this.DrawPointsTimer = new System.Windows.Forms.Timer(this.components);
             this.MainSplitter = new System.Windows.Forms.SplitContainer();
             this.MainGraph = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.PausePlayBTN = new System.Windows.Forms.Button();
+            this.PredictBTN = new System.Windows.Forms.Button();
             this.DebugInfoBox = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.MainSplitter)).BeginInit();
             this.MainSplitter.Panel1.SuspendLayout();
@@ -50,7 +50,7 @@
             // DrawPointsTimer
             // 
             this.DrawPointsTimer.Enabled = true;
-            this.DrawPointsTimer.Interval = 1500;
+            this.DrawPointsTimer.Interval = 250;
             this.DrawPointsTimer.Tick += new System.EventHandler(this.DrawPointsTimer_Tick);
             // 
             // MainSplitter
@@ -65,7 +65,7 @@
             // 
             // MainSplitter.Panel2
             // 
-            this.MainSplitter.Panel2.Controls.Add(this.PausePlayBTN);
+            this.MainSplitter.Panel2.Controls.Add(this.PredictBTN);
             this.MainSplitter.Panel2.Controls.Add(this.DebugInfoBox);
             this.MainSplitter.Size = new System.Drawing.Size(2350, 1247);
             this.MainSplitter.SplitterDistance = 1805;
@@ -97,21 +97,28 @@
             this.MainGraph.Name = "MainGraph";
             series1.BorderWidth = 5;
             series1.ChartArea = "MainArea";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series1.Color = System.Drawing.Color.Blue;
+            series1.EmptyPointStyle.MarkerSize = 10;
+            series1.EmptyPointStyle.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series1.Font = new System.Drawing.Font("Times New Roman", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             series1.Legend = "Algorithms";
             series1.LegendText = "Genetics Algorithm";
-            series1.MarkerBorderColor = System.Drawing.Color.Red;
+            series1.MarkerBorderColor = System.Drawing.Color.Blue;
             series1.MarkerSize = 8;
+            series1.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series1.Name = "Genetics";
             series2.BorderWidth = 5;
             series2.ChartArea = "MainArea";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
             series2.Color = System.Drawing.Color.Green;
+            series2.EmptyPointStyle.MarkerSize = 10;
+            series2.EmptyPointStyle.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             series2.Legend = "Algorithms";
             series2.LegendText = "Backpropagation Algorithm";
+            series2.MarkerSize = 8;
+            series2.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series2.Name = "Backprop";
             series3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
             series3.BorderWidth = 3;
@@ -121,6 +128,7 @@
             series3.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             series3.Legend = "Algorithms";
             series3.LegendText = "Sine Graph";
+            series3.MarkerSize = 8;
             series3.Name = "SineGraph";
             this.MainGraph.Series.Add(series1);
             this.MainGraph.Series.Add(series2);
@@ -133,21 +141,23 @@
             title1.Text = "Backpropagation VS. Genetics Learning Algorithm: Sine Wave";
             this.MainGraph.Titles.Add(title1);
             // 
-            // PausePlayBTN
+            // PredictBTN
             // 
-            this.PausePlayBTN.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PausePlayBTN.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PausePlayBTN.Location = new System.Drawing.Point(0, 800);
-            this.PausePlayBTN.Name = "PausePlayBTN";
-            this.PausePlayBTN.Size = new System.Drawing.Size(541, 447);
-            this.PausePlayBTN.TabIndex = 1;
-            this.PausePlayBTN.Text = "Pause";
-            this.PausePlayBTN.UseVisualStyleBackColor = true;
-            this.PausePlayBTN.Click += new System.EventHandler(this.PausePlayBTN_Click);
+            this.PredictBTN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PredictBTN.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PredictBTN.Location = new System.Drawing.Point(0, 738);
+            this.PredictBTN.Name = "PredictBTN";
+            this.PredictBTN.Size = new System.Drawing.Size(541, 509);
+            this.PredictBTN.TabIndex = 1;
+            this.PredictBTN.Text = "Predict Values";
+            this.PredictBTN.UseVisualStyleBackColor = true;
+            this.PredictBTN.Click += new System.EventHandler(this.PredictBTN_Click);
             // 
             // DebugInfoBox
             // 
-            this.DebugInfoBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.DebugInfoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.DebugInfoBox.Font = new System.Drawing.Font("Arial Rounded MT Bold", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DebugInfoBox.Location = new System.Drawing.Point(0, 0);
             this.DebugInfoBox.Name = "DebugInfoBox";
@@ -178,10 +188,10 @@
         }
 
         #endregion
-        private System.Windows.Forms.Timer DrawPointsTimer;
         private System.Windows.Forms.SplitContainer MainSplitter;
         private System.Windows.Forms.DataVisualization.Charting.Chart MainGraph;
-        private System.Windows.Forms.Button PausePlayBTN;
+        private System.Windows.Forms.Button PredictBTN;
         private System.Windows.Forms.RichTextBox DebugInfoBox;
+        private System.Windows.Forms.Timer DrawPointsTimer;
     }
 }
