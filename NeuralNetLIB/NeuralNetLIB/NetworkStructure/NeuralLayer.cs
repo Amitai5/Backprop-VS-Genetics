@@ -43,13 +43,12 @@ namespace NeuralNetLIB.NetworkStructure
 
         public double[] Compute(double[] inputs)
         {
-            Parallel.For(0, Neurons.Length, i =>
+            Parallel.For(0, Neurons.Length, i => //Parallel For-Loop (Multi-Thread)
             {
                 Neurons[i].Compute(inputs);
             });
             return Outputs;
         }
-
         public void Randomize(Random Rand)
         {
             for (int i = 0; i < Neurons.Length; i++)

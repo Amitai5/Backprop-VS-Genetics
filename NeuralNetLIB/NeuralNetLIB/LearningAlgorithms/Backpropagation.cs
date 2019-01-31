@@ -10,12 +10,14 @@ namespace NeuralNetLIB.LearningAlgorithms
         private readonly Dictionary<Neuron, BackpropagationDelta> Deltas;
         public NeuralNetwork Network { get; private set; }
         public double LearningRate { get; private set; }
+        public double MomentumRate { get; private set; }
         public long EpochCount { get; private set; }
 
-        public Backpropagation(NeuralNetwork neuralNetwork, double learningRate = 1.0)
+        public Backpropagation(NeuralNetwork neuralNetwork, double learningRate = 0.2, double momentumRate = 0.0125)
         {
             EpochCount = 0;
             Network = neuralNetwork;
+            MomentumRate = momentumRate;
             LearningRate = learningRate.Clamp(0, 1);
             Deltas = new Dictionary<Neuron, BackpropagationDelta>();
 
@@ -39,7 +41,11 @@ namespace NeuralNetLIB.LearningAlgorithms
                 {
                     for (int i = 0; i < neuron.InputDendrites.Length; i++)
                     {
-                        neuron.InputDendrites[i] += Deltas[neuron].WeightUpdates[i];
+                        //Calculate Momentum
+                        Deltas[neuron].Momentums[i] = MomentumRate * Deltas[neuron].LastWeightUpdates[i];
+                        Deltas[neuron].LastWeightUpdates[i] = Deltas[neuron].WeightUpdates[i];
+
+                        neuron.InputDendrites[i] += Deltas[neuron].WeightUpdates[i] + Deltas[neuron].Momentums[i];
                     }
                     neuron.BiasValue += Deltas[neuron].BiasUpdate;
                 }
@@ -53,6 +59,37 @@ namespace NeuralNetLIB.LearningAlgorithms
             }
         }
 
+        private void CalculateUpdates(double[] input)
+        {
+            //Input Layer
+            NeuralLayer InputLayer = Network.NeuralLayers[0];
+            for (int i = 0; i < InputLayer.Neurons.Length; i++)
+            {
+                Neuron neuron = InputLayer.Neurons[i];
+                for (int j = 0; j < neuron.InputDendrites.Length; j++)
+                {
+                    Deltas[neuron].WeightUpdates[j] += LearningRate * Deltas[neuron].PartialDerivative * input[j];
+                }
+                Deltas[neuron].BiasUpdate += LearningRate * Deltas[neuron].PartialDerivative;
+            }
+
+            //Hidden Layers
+            for (int i = 1; i < Network.NeuralLayers.Length; i++)
+            {
+                NeuralLayer currLayer = Network.NeuralLayers[i];
+                NeuralLayer prevLayer = Network.NeuralLayers[i - 1];
+
+                for (int j = 0; j < currLayer.Neurons.Length; j++)
+                {
+                    Neuron neuron = currLayer.Neurons[j];
+                    for (int k = 0; k < neuron.InputDendrites.Length; k++)
+                    {
+                        Deltas[neuron].WeightUpdates[k] += LearningRate * Deltas[neuron].PartialDerivative * prevLayer.Outputs[k];
+                    }
+                    Deltas[neuron].BiasUpdate += LearningRate * Deltas[neuron].PartialDerivative;
+                }
+            }
+        }
         public void CalculateError(double[] desiredOutput)
         {
             //Output Layer
@@ -61,7 +98,7 @@ namespace NeuralNetLIB.LearningAlgorithms
             {
                 Neuron neuron = OutputLayer.Neurons[i];
                 double Error = desiredOutput[i] - neuron.Output;
-                Deltas[neuron].PartialDerivative = Error * neuron.ActivationFunc.Derivative(neuron.Output);
+                Deltas[neuron].PartialDerivative = Error * neuron.ActivationFunc.Derivative(neuron.Input);
             }
 
             //Hidden Layers
@@ -80,38 +117,7 @@ namespace NeuralNetLIB.LearningAlgorithms
                         Error += Deltas[nextNeuron].PartialDerivative * nextNeuron.InputDendrites[j];
                     }
 
-                    Deltas[neuron].PartialDerivative = Error * neuron.ActivationFunc.Derivative(neuron.Output);
-                }
-            }
-        }
-        private void CalculateUpdates(double[] input, double learningRate)
-        {
-            //Input Layer
-            NeuralLayer InputLayer = Network.NeuralLayers[0];
-            for (int i = 0; i < InputLayer.Neurons.Length; i++)
-            {
-                Neuron neuron = InputLayer.Neurons[i];
-                for (int j = 0; j < neuron.InputDendrites.Length; j++)
-                {
-                    Deltas[neuron].WeightUpdates[j] += learningRate * Deltas[neuron].PartialDerivative * input[j];
-                }
-                Deltas[neuron].BiasUpdate += learningRate * Deltas[neuron].PartialDerivative;
-            }
-
-            //Hidden Layers
-            for (int i = 1; i < Network.NeuralLayers.Length; i++)
-            {
-                NeuralLayer currLayer = Network.NeuralLayers[i];
-                NeuralLayer prevLayer = Network.NeuralLayers[i - 1];
-
-                for (int j = 0; j < currLayer.Neurons.Length; j++)
-                {
-                    Neuron neuron = currLayer.Neurons[j];
-                    for (int k = 0; k < neuron.InputDendrites.Length; k++)
-                    {
-                        Deltas[neuron].WeightUpdates[k] += learningRate * Deltas[neuron].PartialDerivative * prevLayer.Outputs[k];
-                    }
-                    Deltas[neuron].BiasUpdate += learningRate * Deltas[neuron].PartialDerivative;
+                    Deltas[neuron].PartialDerivative = Error * neuron.ActivationFunc.Derivative(neuron.Input);
                 }
             }
         }
@@ -120,7 +126,7 @@ namespace NeuralNetLIB.LearningAlgorithms
         {
             Network.Compute(input);
             CalculateError(desiredOutput);
-            CalculateUpdates(input, LearningRate);
+            CalculateUpdates(input);
         }
         public double TrainEpoch(double[][] inputs, double[][] desiredOutputs)
         {

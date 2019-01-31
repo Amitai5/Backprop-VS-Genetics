@@ -1,5 +1,6 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
 using System;
+using System.Threading.Tasks;
 
 namespace NeuralNetLIB.NetworkStructure
 {
@@ -7,6 +8,7 @@ namespace NeuralNetLIB.NetworkStructure
     {
         public double BiasValue;
         public double Output { get; private set; }
+        public double Input { get; private set; }
         public double[] InputDendrites { get; private set; }
         public IActivationFunc ActivationFunc { get; private set; }
 
@@ -18,17 +20,22 @@ namespace NeuralNetLIB.NetworkStructure
 
         public double Compute(double[] inputs)
         {
+#if Debug
             if (inputs.Length != InputDendrites.Length)
             {
                 throw new ArgumentException();
             }
+#endif
 
             double output = 0;
-            for (int i = 0; i < InputDendrites.Length; i++) //Parallel For-Loop (Multi-Threadable)
+            Parallel.For(0, InputDendrites.Length, i =>
             {
                 output += inputs[i] * InputDendrites[i];
-            }
-            output = ActivationFunc.Function(output + BiasValue);
+            });
+            Input = output + BiasValue;
+
+            //Run It Through The Activation Function
+            output = ActivationFunc.Function(Input);
             Output = output;
             return output;
         }
