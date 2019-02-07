@@ -2,7 +2,7 @@
 {
     public class ReLU : ActivationFunc
     {
-        public double Derivative(double x)
+        public override double Derivative(double x)
         {
             //The Derrivative Value Of The Point In Which You Are AT
             if (x > 1)
@@ -16,7 +16,7 @@
             return x;
         }
 
-        public double Function(double x)
+        public override double Function(double x)
         {
             //The ReLU Function Itself
             if (x < 0)
