@@ -1,13 +1,7 @@
-﻿using System;
-
-namespace NeuralNetLIB.ActivationFunctions
+﻿namespace NeuralNetLIB.ActivationFunctions
 {
-    public class LeakyReLU : IActivationFunc
+    public class LeakyReLU : ActivationFunc
     {
-        public bool DerrivativeRequiresOutput => false;
-        public double DendriteMinGen => -6;
-        public double DendriteMaxGen => 6;
-
         public double Derivative(double x)
         {
             //The Derrivative Value Of The Point In Which You Are AT
@@ -19,11 +13,6 @@ namespace NeuralNetLIB.ActivationFunctions
             {
                 return 0.01;
             }
-        }
-
-        public double Derivative2(double y)
-        {
-            throw new NotImplementedException();
         }
 
         public double Function(double x)

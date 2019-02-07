@@ -10,9 +10,9 @@ namespace NeuralNetLIB.NetworkStructure
         public double Output { get; private set; }
         public double Input { get; private set; }
         public double[] InputDendrites { get; private set; }
-        public IActivationFunc ActivationFunc { get; private set; }
+        public ActivationFunc ActivationFunc { get; private set; }
 
-        public Neuron(IActivationFunc activationFunc, int inputCount)
+        public Neuron(ActivationFunc activationFunc, int inputCount)
         {
             ActivationFunc = activationFunc;
             InputDendrites = new double[inputCount];

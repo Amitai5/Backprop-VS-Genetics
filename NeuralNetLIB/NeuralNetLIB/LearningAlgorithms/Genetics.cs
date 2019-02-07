@@ -8,7 +8,7 @@ namespace NeuralNetLIB.LearningAlgorithms
     public class Genetics
     {
         //Store The Neural Net Data
-        public IActivationFunc ActivationFunc { get; private set; }
+        public ActivationFunc ActivationFunc { get; private set; }
         public NeuralNetwork BestNetwork { get; private set; }
         private GeneticNeuralNetwork[] NeuralNets;
         public double BestNetworkFitness
