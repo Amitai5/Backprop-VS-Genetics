@@ -12,7 +12,7 @@ namespace NeuralNetSineGraphTest
     public partial class MainForm : Form
     {
         //Set The Constants Of The Graph
-        public const int TestDataCount = 125;
+        public const int TestDataCount = 250;
         public const double GraphDomain = 2 * Math.PI;
         public double StepValue = GraphDomain / TestDataCount;
 
@@ -20,7 +20,7 @@ namespace NeuralNetSineGraphTest
         double NetworkError = 0;
         Genetics GeneticsTrainer;
         Backpropagation BackpropTrainer;
-        public const double TargetNetworkError = 0.005;
+        public const double TargetNetworkError = 0.01;
 
         //Create Test Data
         public double[][] TestDataInputs;
@@ -35,7 +35,6 @@ namespace NeuralNetSineGraphTest
             InitializeComponent();
         }
 
-
         private void SineTestTable_Load(object sender, EventArgs e)
         {
             //Create Model Network & Random
@@ -44,21 +43,20 @@ namespace NeuralNetSineGraphTest
 
             //Create Trainers
             GeneticsTrainer = new Genetics(Rand, ModelNetwork, totalNetCount: 10, mutationRate: 0.05);
-            BackpropTrainer = new Backpropagation(ModelNetwork, 1E-2, 25E-12);
+            BackpropTrainer = new Backpropagation(ModelNetwork, 15E-4, 25E-10);
 
             //Init Test Data & Store Time Per Update
             TestDataInputs = new double[TestDataCount][];
             TestDataOutputs = new double[TestDataCount][];
 
             //Create Test Data & Draw The Model Sine Wave
-            int indexCounter = -1;
+            int indexCounter = 0;
             for (double i = 0; i < GraphDomain; i += StepValue)
             {
-                indexCounter++;
-                double SanitizedInput = SanitizeInput(i);
+                TestDataInputs[indexCounter] = new double[] { i };
                 TestDataOutputs[indexCounter] = new double[] { Math.Sin(i) };
-                TestDataInputs[indexCounter] = new double[] { SanitizedInput };
-                MainGraph.Series[2].Points.AddXY(SanitizedInput, TestDataOutputs[indexCounter][0]);
+                MainGraph.Series[2].Points.AddXY(i, TestDataOutputs[indexCounter][0]);
+                indexCounter++;
             }
 
             //Start Training
@@ -97,12 +95,11 @@ namespace NeuralNetSineGraphTest
             for (double i = 0; i < GraphDomain * 2; i += StepValue)
             {
                 //Re-Draw The Main Sine Graph
-                double SanitizedInput = SanitizeInput(i);
-                MainGraph.Series[2].Points.AddXY(SanitizedInput, Math.Sin(i));
+                MainGraph.Series[2].Points.AddXY(i, Math.Sin(i));
 
                 //Draw Predicted Values
-                MainGraph.Series[1].Points.AddXY(SanitizedInput, BackpropTrainer.Network.Compute(new double[] { SanitizedInput })[0]);
-                MainGraph.Series[0].Points.AddXY(SanitizedInput, GeneticsTrainer.BestNetwork.Compute(new double[] { SanitizedInput })[0]);
+                MainGraph.Series[1].Points.AddXY(i, BackpropTrainer.Network.Compute(new double[] { i })[0]);
+                MainGraph.Series[0].Points.AddXY(i, GeneticsTrainer.BestNetwork.Compute(new double[] { i })[0]);
             }
         }
 
@@ -117,9 +114,8 @@ namespace NeuralNetSineGraphTest
             MainGraph.Series[1].Points.Clear();
             for (double i = 0; i < GraphDomain; i += StepValue)
             {
-                double SanitizedInput = SanitizeInput(i);
-                MainGraph.Series[1].Points.AddXY(SanitizedInput, BackpropTrainer.Network.Compute(new double[] { SanitizedInput })[0]);
-                MainGraph.Series[0].Points.AddXY(SanitizedInput, GeneticsTrainer.BestNetwork.Compute(new double[] { SanitizedInput })[0]);
+                MainGraph.Series[1].Points.AddXY(i, BackpropTrainer.Network.Compute(new double[] { i })[0]);
+                MainGraph.Series[0].Points.AddXY(i, GeneticsTrainer.BestNetwork.Compute(new double[] { i })[0]);
             }
 
             //Get Fitness
@@ -166,10 +162,6 @@ namespace NeuralNetSineGraphTest
                 GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
                 NetworkError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
             }
-        }
-        private double SanitizeInput(double i)
-        {
-            return i; // / GraphDomain;
         }
     }
 }
