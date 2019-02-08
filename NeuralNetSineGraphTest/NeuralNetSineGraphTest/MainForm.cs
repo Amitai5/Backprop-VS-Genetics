@@ -12,8 +12,8 @@ namespace NeuralNetSineGraphTest
     public partial class MainForm : Form
     {
         //Set The Constants Of The Graph
-        public const int TestDataCount = 250;
-        public const double GraphDomain = 2 * Math.PI;
+        public const int TestDataCount = 750;
+        public const double GraphDomain = 4 * Math.PI;
         public double StepValue = GraphDomain / TestDataCount;
 
         //Neural Network Objects

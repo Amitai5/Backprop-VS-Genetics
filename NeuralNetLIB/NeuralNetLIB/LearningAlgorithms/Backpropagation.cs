@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NeuralNetLIB.LearningAlgorithms
 {
@@ -64,7 +63,7 @@ namespace NeuralNetLIB.LearningAlgorithms
         {
             //Input Layer
             NeuralLayer InputLayer = Network.NeuralLayers[0];
-            Parallel.For(0, InputLayer.Neurons.Length, i =>
+            for (int i = 0; i < InputLayer.Neurons.Length; i++)
             {
                 Neuron neuron = InputLayer.Neurons[i];
                 for (int j = 0; j < neuron.InputDendrites.Length; j++)
@@ -72,10 +71,10 @@ namespace NeuralNetLIB.LearningAlgorithms
                     Deltas[neuron].WeightUpdates[j] += LearningRate * Deltas[neuron].PartialDerivative * input[j];
                 }
                 Deltas[neuron].BiasUpdate += LearningRate * Deltas[neuron].PartialDerivative;
-            });
+            }
 
             //Hidden Layers
-            Parallel.For(1, Network.NeuralLayers.Length, i =>
+            for (int i = 1; i < Network.NeuralLayers.Length; i++)
             {
                 NeuralLayer currLayer = Network.NeuralLayers[i];
                 NeuralLayer prevLayer = Network.NeuralLayers[i - 1];
@@ -89,21 +88,21 @@ namespace NeuralNetLIB.LearningAlgorithms
                     }
                     Deltas[neuron].BiasUpdate += LearningRate * Deltas[neuron].PartialDerivative;
                 }
-            });
+            }
         }
         public void CalculateError(double[] desiredOutput)
         {
             //Output Layer
             NeuralLayer OutputLayer = Network.OutputLayer;
-            Parallel.For(0, OutputLayer.Neurons.Length, i =>
+            for (int i = 0; i < OutputLayer.Neurons.Length; i++)
             {
                 Neuron neuron = OutputLayer.Neurons[i];
                 double Error = desiredOutput[i] - neuron.Output;
                 Deltas[neuron].PartialDerivative = Error * neuron.ActivationFunc.Derivative(neuron.Input);
-            });
+            }
 
             //Hidden Layers
-            Parallel.For(Network.NeuralLayers.Length - 2, 0, i =>
+            for (int i = Network.NeuralLayers.Length - 2; i >= 0; i--)
             {
                 NeuralLayer CurrentLayer = Network.NeuralLayers[i];
                 NeuralLayer NextLayer = Network.NeuralLayers[i + 1];
@@ -120,7 +119,7 @@ namespace NeuralNetLIB.LearningAlgorithms
 
                     Deltas[neuron].PartialDerivative = Error * neuron.ActivationFunc.Derivative(neuron.Input);
                 }
-            });
+            }
         }
 
         protected void Train(double[] input, double[] desiredOutput)
@@ -135,19 +134,19 @@ namespace NeuralNetLIB.LearningAlgorithms
             EpochCount++;
 
             ClearUpdates();
-            Parallel.For(0, inputs.Length, i =>
+            for (int i = 0; i < inputs.Length; i++)
             {
                 Train(inputs[i], desiredOutputs[i]);
-            });
+            }
             ApplyUpdates();
 
             //Calculate And Return The Error
             double MeanAbsoluteError = 0;
-            Parallel.For(0, inputs.Length, i =>
+            for (int i = 0; i < inputs.Length; i++)
             {
                 double[] Output = Network.Compute(inputs[i]);
                 MeanAbsoluteError += desiredOutputs[i].Zip(Output, (e, a) => Math.Pow(e - a, 2)).Average();
-            });
+            }
             MeanAbsoluteError /= inputs.Length;
             return MeanAbsoluteError;
         }
