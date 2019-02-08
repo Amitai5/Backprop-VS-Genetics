@@ -1,5 +1,6 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
 using System;
+using System.Threading.Tasks;
 
 namespace NeuralNetLIB.NetworkStructure
 {
@@ -42,10 +43,10 @@ namespace NeuralNetLIB.NetworkStructure
 
         public double[] Compute(double[] inputs)
         {
-            for (int i = 0; i < inputs.Length; i++)
+            Parallel.For(0, Neurons.Length, i => //Parallel For-Loop (Multi-Thread)
             {
                 Neurons[i].Compute(inputs);
-            }
+            });
             return Outputs;
         }
         public void Randomize(Random Rand)

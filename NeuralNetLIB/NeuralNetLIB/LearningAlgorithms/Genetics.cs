@@ -1,7 +1,6 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
 using NeuralNetLIB.NetworkStructure;
 using System;
-using System.Threading.Tasks;
 
 namespace NeuralNetLIB.LearningAlgorithms
 {
@@ -51,7 +50,7 @@ namespace NeuralNetLIB.LearningAlgorithms
         {
             //Cross Over 80% Of Nets & Randomize 10%
             int OneTenthPopulation = NeuralNets.Length / 10;
-            Parallel.For(OneTenthPopulation, NeuralNets.Length, j =>
+            for (int j = OneTenthPopulation; j < NeuralNets.Length; j++)
             {
                 GeneticNeuralNetwork CurrentNet = NeuralNets[j];
                 if (j < 9 * OneTenthPopulation)
@@ -62,13 +61,13 @@ namespace NeuralNetLIB.LearningAlgorithms
                 {
                     CurrentNet.Randomize(Rand);
                 }
-            });
+            }
 
             //Calculate Fitnesses & Sort
-            Parallel.For(0, inputs.Length, i =>
+            for (int i = 0; i < NeuralNets.Length; i++)
             {
                 CalculateFitness(NeuralNets[i], inputs, outputs);
-            });
+            }
             Array.Sort(NeuralNets, (a, b) => a.Fitness.CompareTo(b.Fitness));
             BestNetwork = NeuralNets[0];
             GenerationCount++;
