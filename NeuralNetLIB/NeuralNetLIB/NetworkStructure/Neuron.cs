@@ -1,6 +1,6 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
 using System;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace NeuralNetLIB.NetworkStructure
 {
@@ -18,20 +18,24 @@ namespace NeuralNetLIB.NetworkStructure
             InputDendrites = new double[inputCount];
         }
 
-        public double Compute(double[] inputs)
+        [Conditional("DEBUG")]
+        private void CheckInputLength(double[] inputs)
         {
-#if Debug
             if (inputs.Length != InputDendrites.Length)
             {
                 throw new ArgumentException();
             }
-#endif
+        }
+        public double Compute(double[] inputs)
+        {
+            //Will Only Run When In Debug Mode
+            CheckInputLength(inputs);
 
             double output = 0;
-            Parallel.For(0, InputDendrites.Length, i =>
+            for (int i = 0; i < InputDendrites.Length; i++)
             {
                 output += inputs[i] * InputDendrites[i];
-            });
+            }
             Input = output + BiasValue;
 
             //Run It Through The Activation Function
