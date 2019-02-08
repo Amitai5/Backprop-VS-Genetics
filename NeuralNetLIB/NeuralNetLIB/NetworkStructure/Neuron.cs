@@ -39,9 +39,8 @@ namespace NeuralNetLIB.NetworkStructure
             Input = output + BiasValue;
 
             //Run It Through The Activation Function
-            output = ActivationFunc.Function(Input);
-            Output = output;
-            return output;
+            Output = ActivationFunc.Function(Input);
+            return Output;
         }
 
         public void Randomize(Random Rand)

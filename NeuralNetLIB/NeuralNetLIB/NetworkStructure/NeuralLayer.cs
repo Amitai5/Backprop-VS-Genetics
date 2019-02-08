@@ -42,7 +42,7 @@ namespace NeuralNetLIB.NetworkStructure
 
         public double[] Compute(double[] inputs)
         {
-            for (int i = 0; i < inputs.Length; i++)
+            for (int i = 0; i < Neurons.Length; i++)
             {
                 Neurons[i].Compute(inputs);
             }

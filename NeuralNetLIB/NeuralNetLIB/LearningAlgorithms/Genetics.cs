@@ -65,7 +65,7 @@ namespace NeuralNetLIB.LearningAlgorithms
             });
 
             //Calculate Fitnesses & Sort
-            Parallel.For(0, inputs.Length, i =>
+            Parallel.For(0, NeuralNets.Length, i =>
             {
                 CalculateFitness(NeuralNets[i], inputs, outputs);
             });

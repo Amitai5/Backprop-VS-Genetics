@@ -64,7 +64,7 @@ namespace NeuralNetLIB.LearningAlgorithms
         {
             //Input Layer
             NeuralLayer InputLayer = Network.NeuralLayers[0];
-            for (int i = 0; i < InputLayer.Neurons.Length; i++)
+            Parallel.For(0, InputLayer.Neurons.Length, i =>
             {
                 Neuron neuron = InputLayer.Neurons[i];
                 for (int j = 0; j < neuron.InputDendrites.Length; j++)
@@ -72,10 +72,10 @@ namespace NeuralNetLIB.LearningAlgorithms
                     Deltas[neuron].WeightUpdates[j] += LearningRate * Deltas[neuron].PartialDerivative * input[j];
                 }
                 Deltas[neuron].BiasUpdate += LearningRate * Deltas[neuron].PartialDerivative;
-            }
+            });
 
             //Hidden Layers
-            for (int i = 1; i < Network.NeuralLayers.Length; i++)
+            Parallel.For(1, Network.NeuralLayers.Length, i =>
             {
                 NeuralLayer currLayer = Network.NeuralLayers[i];
                 NeuralLayer prevLayer = Network.NeuralLayers[i - 1];
@@ -89,7 +89,7 @@ namespace NeuralNetLIB.LearningAlgorithms
                     }
                     Deltas[neuron].BiasUpdate += LearningRate * Deltas[neuron].PartialDerivative;
                 }
-            }
+            });
         }
         public void CalculateError(double[] desiredOutput)
         {
@@ -135,10 +135,10 @@ namespace NeuralNetLIB.LearningAlgorithms
             EpochCount++;
 
             ClearUpdates();
-            for (int i = 0; i < inputs.Length; i++)
+            Parallel.For(0, inputs.Length, i =>
             {
                 Train(inputs[i], desiredOutputs[i]);
-            }
+            });
             ApplyUpdates();
 
             //Calculate And Return The Error
