@@ -12,15 +12,15 @@ namespace NeuralNetSineGraphTest
     public partial class MainForm : Form
     {
         //Set The Constants Of The Graph
-        public const int TestDataCount = 250;
-        public const double GraphDomain = 2 * Math.PI;
+        public const int TestDataCount = 750;
+        public const double GraphDomain = 4 * Math.PI;
         public double StepValue = GraphDomain / TestDataCount;
 
         //Neural Network Objects
         double NetworkError = 0;
         Genetics GeneticsTrainer;
         Backpropagation BackpropTrainer;
-        public const double TargetNetworkError = 0.01;
+        public const double TargetNetworkError = 0.005;
 
         //Create Test Data
         public double[][] TestDataInputs;
@@ -35,15 +35,58 @@ namespace NeuralNetSineGraphTest
             InitializeComponent();
         }
 
+        private void PredictBTN_Click(object sender, EventArgs e)
+        {
+            //Stop The Background Worker & Timer
+            DrawPointsTimer.Stop();
+            KeepWorking = false;
+
+            //Update Display Again
+            UpdateDisplay();
+
+            //Clear Graph
+            MainGraph.Series[0].Points.Clear();
+            MainGraph.Series[1].Points.Clear();
+            MainGraph.Series[2].Points.Clear();
+
+            //Change Graph Display
+            for (int i = 0; i < MainGraph.Series.Count; i++)
+            {
+                MainGraph.Series[i].BorderWidth = 10;
+                MainGraph.Series[i].MarkerStyle = MarkerStyle.None;
+                MainGraph.Series[i].ChartType = SeriesChartType.Line;
+                MainGraph.Series[i].BorderDashStyle = ChartDashStyle.Solid;
+            }
+
+            //Draw The Second Sine Period
+            for (double i = 0; i < GraphDomain * 2; i += StepValue)
+            {
+                //Re-Draw The Main Sine Graph
+                MainGraph.Series[2].Points.AddXY(i, Math.Sin(i));
+
+                //Draw Predicted Values
+                MainGraph.Series[1].Points.AddXY(i, BackpropTrainer.Network.Compute(new double[] { i })[0]);
+                MainGraph.Series[0].Points.AddXY(i, GeneticsTrainer.BestNetwork.Compute(new double[] { i })[0]);
+            }
+
+            //Create Prediction Line
+            MainGraph.Series[3].Points.AddXY(GraphDomain, 5);
+            MainGraph.Series[3].Points.AddXY(GraphDomain, -5);
+            MainGraph.Series[3].BorderDashStyle = ChartDashStyle.Dash;
+        }
         private void SineTestTable_Load(object sender, EventArgs e)
         {
+            //Set Graph Min And Max
+            MainGraph.ChartAreas[0].AxisY.Maximum = 1.25;
+            MainGraph.ChartAreas[0].AxisY.Minimum = -1.25;
+
             //Create Model Network & Random
             Random Rand = new Random();
             NeuralNetwork ModelNetwork = new NeuralNetwork(new SoftSine(), 1, 20, 1);
 
             //Create Trainers
             GeneticsTrainer = new Genetics(Rand, ModelNetwork, totalNetCount: 10, mutationRate: 0.05);
-            BackpropTrainer = new Backpropagation(ModelNetwork, 15E-4, 25E-10);
+            BackpropTrainer = new Backpropagation(ModelNetwork, 25E-5, 25E-10);
 
             //Init Test Data & Store Time Per Update
             TestDataInputs = new double[TestDataCount][];
@@ -68,45 +111,16 @@ namespace NeuralNetSineGraphTest
             MainWorker.DoWork += BackgroundWorker_DoWork;
             MainWorker.RunWorkerAsync();
         }
-        private void PredictBTN_Click(object sender, EventArgs e)
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            //Stop The Background Worker & Timer
-            DrawPointsTimer.Stop();
-            KeepWorking = false;
-
-            //Update Display Again
-            UpdateDisplay();
-
-            //Clear Graph
-            MainGraph.Series[0].Points.Clear();
-            MainGraph.Series[1].Points.Clear();
-            MainGraph.Series[2].Points.Clear();
-
-            //Change Graph Display
-            for (int i = 0; i < MainGraph.Series.Count; i++)
+            //Test Train Epoch
+            while (KeepWorking)
             {
-                MainGraph.Series[i].BorderWidth = 8;
-                MainGraph.Series[i].MarkerStyle = MarkerStyle.None;
-                MainGraph.Series[i].ChartType = SeriesChartType.Line;
-                MainGraph.Series[i].BorderDashStyle = ChartDashStyle.Solid;
-            }
-
-            //Draw The Second Sine Period
-            for (double i = 0; i < GraphDomain * 2; i += StepValue)
-            {
-                //Re-Draw The Main Sine Graph
-                MainGraph.Series[2].Points.AddXY(i, Math.Sin(i));
-
-                //Draw Predicted Values
-                MainGraph.Series[1].Points.AddXY(i, BackpropTrainer.Network.Compute(new double[] { i })[0]);
-                MainGraph.Series[0].Points.AddXY(i, GeneticsTrainer.BestNetwork.Compute(new double[] { i })[0]);
+                GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
+                NetworkError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
             }
         }
 
-        private void DrawPointsTimer_Tick(object sender, EventArgs e)
-        {
-            UpdateDisplay();
-        }
         public void UpdateDisplay()
         {
             //Draw The Neural Network's Graph
@@ -153,14 +167,15 @@ namespace NeuralNetSineGraphTest
                 PredictBTN_Click(this, new EventArgs());
             }
         }
-
-        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void DrawPointsTimer_Tick(object sender, EventArgs e)
         {
-            //Test Train Epoch
-            while (KeepWorking)
+            UpdateDisplay();
+        }
+        private void MainGraph_CustomizeLegend(object sender, CustomizeLegendEventArgs e)
+        {
+            foreach (LegendItem legendItem in e.LegendItems)
             {
-                GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
-                NetworkError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
+                legendItem.MarkerSize = 64;
             }
         }
     }
