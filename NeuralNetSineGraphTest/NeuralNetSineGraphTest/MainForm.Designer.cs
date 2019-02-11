@@ -34,6 +34,7 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.DrawPointsTimer = new System.Windows.Forms.Timer(this.components);
             this.MainSplitter = new System.Windows.Forms.SplitContainer();
@@ -130,9 +131,16 @@
             series3.LegendText = "Sine Graph";
             series3.MarkerSize = 8;
             series3.Name = "SineGraph";
+            series4.ChartArea = "MainArea";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.Black;
+            series4.IsVisibleInLegend = false;
+            series4.Legend = "Algorithms";
+            series4.Name = "PredictionLine";
             this.MainGraph.Series.Add(series1);
             this.MainGraph.Series.Add(series2);
             this.MainGraph.Series.Add(series3);
+            this.MainGraph.Series.Add(series4);
             this.MainGraph.Size = new System.Drawing.Size(1805, 1247);
             this.MainGraph.TabIndex = 2;
             title1.Alignment = System.Drawing.ContentAlignment.BottomLeft;
@@ -140,10 +148,11 @@
             title1.Name = "GraphTitle";
             title1.Text = "Backpropagation VS. Genetics Learning Algorithm: Sine Wave";
             this.MainGraph.Titles.Add(title1);
+            this.MainGraph.CustomizeLegend += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.CustomizeLegendEventArgs>(this.MainGraph_CustomizeLegend);
             // 
             // PredictBTN
             // 
-            this.PredictBTN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.PredictBTN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PredictBTN.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PredictBTN.Location = new System.Drawing.Point(0, 738);
@@ -156,7 +165,7 @@
             // 
             // DebugInfoBox
             // 
-            this.DebugInfoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.DebugInfoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DebugInfoBox.Font = new System.Drawing.Font("Arial Rounded MT Bold", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DebugInfoBox.Location = new System.Drawing.Point(0, 0);
