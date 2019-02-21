@@ -1,6 +1,5 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
 using System;
-using System.Threading.Tasks;
 
 namespace NeuralNetLIB.NetworkStructure
 {
@@ -27,9 +26,9 @@ namespace NeuralNetLIB.NetworkStructure
         }
         public Neuron[] Neurons { get; private set; }
         public int NeuronLength { get => Neurons.Length; }
-        public IActivationFunc ActivationFunc { get; private set; }
+        public ActivationFunc ActivationFunc { get; private set; }
 
-        public NeuralLayer(IActivationFunc activationFunc, int inputCount, int neuronCount)
+        public NeuralLayer(ActivationFunc activationFunc, int inputCount, int neuronCount)
         {
             ActivationFunc = activationFunc;
             Neurons = new Neuron[neuronCount];
@@ -43,10 +42,10 @@ namespace NeuralNetLIB.NetworkStructure
 
         public double[] Compute(double[] inputs)
         {
-            Parallel.For(0, Neurons.Length, i => //Parallel For-Loop (Multi-Thread)
+            for (int i = 0; i < Neurons.Length; i++)
             {
                 Neurons[i].Compute(inputs);
-            });
+            }
             return Outputs;
         }
         public void Randomize(Random Rand)

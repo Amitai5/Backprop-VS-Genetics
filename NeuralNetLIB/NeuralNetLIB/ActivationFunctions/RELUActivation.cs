@@ -1,14 +1,8 @@
-﻿using System;
-
-namespace NeuralNetLIB.ActivationFunctions
+﻿namespace NeuralNetLIB.ActivationFunctions
 {
-    public class ReLU : IActivationFunc
+    public class ReLU : ActivationFunc
     {
-        public bool DerrivativeRequiresOutput => false;
-        public double DendriteMinGen => -6;
-        public double DendriteMaxGen => 6;
-
-        public double Derivative(double x)
+        public override double Derivative(double x)
         {
             //The Derrivative Value Of The Point In Which You Are AT
             if (x > 1)
@@ -22,12 +16,7 @@ namespace NeuralNetLIB.ActivationFunctions
             return x;
         }
 
-        public double Derivative2(double y)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double Function(double x)
+        public override double Function(double x)
         {
             //The ReLU Function Itself
             if (x < 0)

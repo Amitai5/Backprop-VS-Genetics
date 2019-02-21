@@ -15,10 +15,10 @@ namespace NeuralNetLIB.NetworkStructure
         public int ExpectedInputCount { get; private set; }
         public int LayerCount { get => NeuralLayers.Length; }
         public NeuralLayer[] NeuralLayers { get; private set; }
-        public IActivationFunc ActivationFunc { get; private set; }
+        public ActivationFunc ActivationFunc { get; private set; }
         public NeuralLayer OutputLayer => NeuralLayers[NeuralLayers.Length - 1];
 
-        public NeuralNetwork(IActivationFunc activationFunc, int inputCount, params int[] neuronCounts)
+        public NeuralNetwork(ActivationFunc activationFunc, int inputCount, params int[] neuronCounts)
         {
             //Create Neural Network
             ActivationFunc = activationFunc;

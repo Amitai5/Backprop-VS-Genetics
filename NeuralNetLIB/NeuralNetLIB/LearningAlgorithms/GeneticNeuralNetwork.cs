@@ -10,7 +10,7 @@ namespace NeuralNetLIB.LearningAlgorithms
         //Save The Fitness
         public double Fitness { get; set; }
 
-        public GeneticNeuralNetwork(IActivationFunc activationFunc, int inputCount, params int[] neuronCounts)
+        public GeneticNeuralNetwork(ActivationFunc activationFunc, int inputCount, params int[] neuronCounts)
             : base(activationFunc, inputCount, neuronCounts)
         {
             Fitness = Double.PositiveInfinity;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NeuralNetLIB.LearningAlgorithms
 {
@@ -39,14 +40,14 @@ namespace NeuralNetLIB.LearningAlgorithms
             {
                 foreach (Neuron neuron in layer.Neurons)
                 {
-                    for (int i = 0; i < neuron.InputDendrites.Length; i++)
+                    Parallel.For(0, neuron.InputDendrites.Length, i =>
                     {
                         //Calculate Momentum
                         Deltas[neuron].Momentums[i] = MomentumRate * Deltas[neuron].LastWeightUpdates[i];
                         Deltas[neuron].LastWeightUpdates[i] = Deltas[neuron].WeightUpdates[i];
 
                         neuron.InputDendrites[i] += Deltas[neuron].WeightUpdates[i] + Deltas[neuron].Momentums[i];
-                    }
+                    });
                     neuron.BiasValue += Deltas[neuron].BiasUpdate;
                 }
             }
@@ -141,14 +142,14 @@ namespace NeuralNetLIB.LearningAlgorithms
             ApplyUpdates();
 
             //Calculate And Return The Error
-            double MeanAbsoluteError = 0;
+            double MeanSquaredError = 0;
             for (int i = 0; i < inputs.Length; i++)
             {
                 double[] Output = Network.Compute(inputs[i]);
-                MeanAbsoluteError += desiredOutputs[i].Zip(Output, (e, a) => Math.Pow(e - a, 2)).Average();
+                MeanSquaredError += desiredOutputs[i].Zip(Output, (e, a) => Math.Pow(e - a, 2)).Average();
             }
-            MeanAbsoluteError /= inputs.Length;
-            return MeanAbsoluteError;
+            MeanSquaredError /= inputs.Length;
+            return MeanSquaredError;
         }
     }
 }

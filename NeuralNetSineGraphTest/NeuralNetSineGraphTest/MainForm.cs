@@ -12,7 +12,7 @@ namespace NeuralNetSineGraphTest
     public partial class MainForm : Form
     {
         //Set The Constants Of The Graph
-        public const int TestDataCount = 750;
+        public const int TestDataCount = 1250;
         public const double GraphDomain = 4 * Math.PI;
         public double StepValue = GraphDomain / TestDataCount;
 
@@ -86,7 +86,7 @@ namespace NeuralNetSineGraphTest
 
             //Create Trainers
             GeneticsTrainer = new Genetics(Rand, ModelNetwork, totalNetCount: 10, mutationRate: 0.05);
-            BackpropTrainer = new Backpropagation(ModelNetwork, 25E-5, 25E-10);
+            BackpropTrainer = new Backpropagation(ModelNetwork, 25E-6, 25E-10);
 
             //Init Test Data & Store Time Per Update
             TestDataInputs = new double[TestDataCount][];

@@ -1,6 +1,6 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
 using System;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace NeuralNetLIB.NetworkStructure
 {
@@ -10,34 +10,37 @@ namespace NeuralNetLIB.NetworkStructure
         public double Output { get; private set; }
         public double Input { get; private set; }
         public double[] InputDendrites { get; private set; }
-        public IActivationFunc ActivationFunc { get; private set; }
+        public ActivationFunc ActivationFunc { get; private set; }
 
-        public Neuron(IActivationFunc activationFunc, int inputCount)
+        public Neuron(ActivationFunc activationFunc, int inputCount)
         {
             ActivationFunc = activationFunc;
             InputDendrites = new double[inputCount];
         }
 
-        public double Compute(double[] inputs)
+        [Conditional("DEBUG")]
+        private void CheckInputLength(double[] inputs)
         {
-#if Debug
             if (inputs.Length != InputDendrites.Length)
             {
                 throw new ArgumentException();
             }
-#endif
+        }
+        public double Compute(double[] inputs)
+        {
+            //Will Only Run When In Debug Mode
+            CheckInputLength(inputs);
 
             double output = 0;
-            Parallel.For(0, InputDendrites.Length, i =>
+            for (int i = 0; i < InputDendrites.Length; i++)
             {
                 output += inputs[i] * InputDendrites[i];
-            });
+            }
             Input = output + BiasValue;
 
             //Run It Through The Activation Function
-            output = ActivationFunc.Function(Input);
-            Output = output;
-            return output;
+            Output = ActivationFunc.Function(Input);
+            return Output;
         }
 
         public void Randomize(Random Rand)
