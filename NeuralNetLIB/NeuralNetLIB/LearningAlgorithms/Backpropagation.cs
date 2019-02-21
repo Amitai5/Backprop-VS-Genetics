@@ -142,14 +142,14 @@ namespace NeuralNetLIB.LearningAlgorithms
             ApplyUpdates();
 
             //Calculate And Return The Error
-            double MeanAbsoluteError = 0;
-            Parallel.For(0, inputs.Length, i =>
+            double MeanSquaredError = 0;
+            for (int i = 0; i < inputs.Length; i++)
             {
                 double[] Output = Network.Compute(inputs[i]);
-                MeanAbsoluteError += desiredOutputs[i].Zip(Output, (e, a) => Math.Pow(e - a, 2)).Average();
-            });
-            MeanAbsoluteError /= inputs.Length;
-            return MeanAbsoluteError;
+                MeanSquaredError += desiredOutputs[i].Zip(Output, (e, a) => Math.Pow(e - a, 2)).Average();
+            }
+            MeanSquaredError /= inputs.Length;
+            return MeanSquaredError;
         }
     }
 }
