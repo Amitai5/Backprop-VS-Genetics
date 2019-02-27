@@ -12,11 +12,11 @@ namespace NeuralNetXORTest
             //Create Neural Nets
             Random randy = new Random();
             NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 2, 2, 1);
-            Backpropagation BackpropTrainer = new Backpropagation(ModelNetwork);
-            Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 25);
+            Backpropagation BackpropTrainer = new Backpropagation(randy, ModelNetwork);
+            Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 500);
 
             //Neural Net Variables
-            double NeuralNetworkTargetError = 0.01;
+            double NeuralNetworkTargetError = 0.05;
             double BackpropError = 0;
 
             //Set Test Data
@@ -67,7 +67,7 @@ namespace NeuralNetXORTest
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"Backpropagation Results: ");
                 Console.WriteLine($"Epoch Count: {BackpropTrainer.EpochCount}");
-                Console.WriteLine($"Learning Time: {BackpropLearnTime}{Environment.NewLine}");
+                Console.WriteLine($"Learning Time: {BackpropLearnTime.TotalMilliseconds}{Environment.NewLine}");
                 WriteNeuralNetSingleValue(BackpropTrainer.Network, new double[] { 1, 1 });
                 WriteNeuralNetSingleValue(BackpropTrainer.Network, new double[] { 0, 1 });
                 WriteNeuralNetSingleValue(BackpropTrainer.Network, new double[] { 1, 0 });
@@ -83,7 +83,7 @@ namespace NeuralNetXORTest
                 //Write Out The Values Of The Genetics Neural Network
                 Console.WriteLine($"Genetics Results: ");
                 Console.WriteLine($"Generation Count: {GeneticsTrainer.GenerationCount}");
-                Console.WriteLine($"Learning Time: {GeneticsLearnTime}{Environment.NewLine}");
+                Console.WriteLine($"Learning Time: {GeneticsLearnTime.TotalMilliseconds}{Environment.NewLine}");
                 WriteNeuralNetSingleValue(GeneticsTrainer.BestNetwork, new double[] { 1, 1 });
                 WriteNeuralNetSingleValue(GeneticsTrainer.BestNetwork, new double[] { 0, 1 });
                 WriteNeuralNetSingleValue(GeneticsTrainer.BestNetwork, new double[] { 1, 0 });

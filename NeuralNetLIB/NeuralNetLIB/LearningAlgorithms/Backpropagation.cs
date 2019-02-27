@@ -14,7 +14,7 @@ namespace NeuralNetLIB.LearningAlgorithms
         public double MomentumRate { get; private set; }
         public long EpochCount { get; private set; }
 
-        public Backpropagation(NeuralNetwork neuralNetwork, double learningRate = 0.2, double momentumRate = 0.0125)
+        public Backpropagation(Random randy, NeuralNetwork neuralNetwork, double learningRate = 0.2, double momentumRate = 0.0125)
         {
             EpochCount = 0;
             Network = neuralNetwork;
@@ -22,7 +22,7 @@ namespace NeuralNetLIB.LearningAlgorithms
             LearningRate = learningRate.Clamp(0, 1);
             Deltas = new Dictionary<Neuron, BackpropagationDelta>();
 
-            Network.Randomize(new Random());
+            Network.Randomize(randy);
             for (int l = 0; l < Network.NeuralLayers.Length; l++)
             {
                 NeuralLayer Layer = Network.NeuralLayers[l];

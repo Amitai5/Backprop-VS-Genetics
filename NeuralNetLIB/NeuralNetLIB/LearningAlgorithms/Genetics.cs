@@ -51,23 +51,23 @@ namespace NeuralNetLIB.LearningAlgorithms
         {
             //Cross Over 80% Of Nets & Randomize 10%
             int OneTenthPopulation = NeuralNets.Length / 10;
-            Parallel.For(OneTenthPopulation, NeuralNets.Length, j =>
+            for (int i = OneTenthPopulation; i < NeuralNets.Length; i++)
             {
-                GeneticNeuralNetwork CurrentNet = NeuralNets[j];
-                if (j < 9 * OneTenthPopulation)
+                GeneticNeuralNetwork CurrentNet = NeuralNets[i];
+                if (i < 9 * OneTenthPopulation)
                 {
-                    CurrentNet.CrossOverAndMutate(NeuralNets[j % OneTenthPopulation], MutationRate, Rand);
+                    CurrentNet.CrossOverAndMutate(NeuralNets[i % OneTenthPopulation], MutationRate, Rand);
                 }
                 else
                 {
                     CurrentNet.Randomize(Rand);
                 }
-            });
+            }
 
             //Calculate Fitnesses & Sort
-            Parallel.For(0, NeuralNets.Length, i =>
+            Parallel.For(0, NeuralNets.Length, j =>
             {
-                CalculateFitness(NeuralNets[i], inputs, outputs);
+                CalculateFitness(NeuralNets[j], inputs, outputs);
             });
             Array.Sort(NeuralNets, (a, b) => a.Fitness.CompareTo(b.Fitness));
             BestNetwork = NeuralNets[0];
