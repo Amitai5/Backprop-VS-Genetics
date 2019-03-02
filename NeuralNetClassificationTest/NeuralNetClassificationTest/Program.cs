@@ -13,7 +13,7 @@ namespace NeuralNetClassificationTest
             //Set Default Appearance Variables
             Console.CursorVisible = false;
             Console.SetWindowSize(100, 50);
-            Console.SetBufferSize(100, 50);
+            Console.SetBufferSize(100, 60);
             Console.Title = "Neural Net Classification Test";
 
             while (true)
@@ -21,34 +21,38 @@ namespace NeuralNetClassificationTest
                 //Ask For Amount Of Epocs/Generations
                 Random randy = new Random(18);
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("Target Epoch/Generation Count: ");
+                Console.Write("Train Time (in milliseconds): ");
                 Console.ForegroundColor = ConsoleColor.White;
-                int FinalEpochGenCount = int.Parse(Console.ReadLine());
+                int Milliseconds = int.Parse(Console.ReadLine());
 
                 Dictionary<double[], string> NewData = new Dictionary<double[], string>
                 {
                     //  Input Format: 
-                    //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing, Lifespan (years)
-                    { new double[] { 0, 1, 1, 1, 30 }, "Tuna" },
-                    { new double[] { 4, 0, 1, 1, 12 }, "Frog" },
-                    { new double[] { 4, 0, 0, 0, 6 }, "Stoat" },
-                    { new double[] { 4, 1, 1, 0, 15 }, "Gecko" },
-                    { new double[] { 2, 0, 0, 0, 79 }, "Human" },
-                    { new double[] { 0, 1, 1, 1, 8 }, "Salmon" },
-                    { new double[] { 5, 0, 1, 1, 35 }, "Starfish" },
-                    { new double[] { 4, 1, 1, 0, 5 }, "Chameleon" },
-                    { new double[] { 2, 1, 1, 0, 80 }, "Sea Turtle" },
-                    { new double[] { 8, 0, 1, 0, 3 }, "Black Widow" },
-                    { new double[] { 4, 1, 1, 0, 30 }, "Komodo Dragon" }
+                    //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing, Has Fins
+                    { new double[] { 4, 0, 1, 1, 0 }, "Frog" },
+                    { new double[] { 4, 0, 0, 0, 0 }, "Corgi" },
+                    { new double[] { 4, 0, 0, 0, 0 }, "Tiger" },
+                    { new double[] { 4, 0, 0, 0, 0 }, "Stoat" },
+                    { new double[] { 4, 1, 1, 0, 0 }, "Gecko" },
+                    { new double[] { 2, 0, 0, 0, 0 }, "Human" },
+                    { new double[] { 0, 1, 1, 1, 1 }, "Salmon" },
+                    { new double[] { 0, 0, 0, 0, 1 }, "Dolphin" },
+                    { new double[] { 5, 0, 1, 1, 0 }, "Starfish" },
+                    { new double[] { 4, 1, 1, 0, 0 }, "Chameleon" },
+                    { new double[] { 2, 1, 1, 0, 0 }, "Sea Turtle" },
+                    { new double[] { 8, 0, 1, 0, 0 }, "Black Widow" },
+                    { new double[] { 4, 1, 1, 0, 0 }, "Komodo Dragon" }
                 };
                 double[] NewDataCorrectOutputs = new double[]
                 {
-                    0,    //Tuna
                     0,    //Frog
+                    0,    //Corgi
+                    0,    //Tiger
                     0,    //Stoat
                     1,    //Gecko
                     0,    //Human
                     0,    //Salmon
+                    0,    //Dolphin
                     0,    //Starfish
                     1,    //Chameleon
                     1,    //Sea Turtle
@@ -59,17 +63,17 @@ namespace NeuralNetClassificationTest
                 Dictionary<double[], string> TestData = new Dictionary<double[], string>
                 {
                     //  Input Format: 
-                    //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing
-                    { new double[] { 4, 0, 0, 0, 15 }, "Corgi" },
-                    { new double[] { 2, 0, 0, 0, 15 }, "Seagull" },
-                    { new double[] { 0, 0, 1, 1, 30 }, "Jelly Fish" },
-                    { new double[] { 0, 1, 1, 0, 20 }, "Burmese Python" },
-                    { new double[] { 4, 1, 1, 0, 100 }, "Nile Crocodile" },
+                    //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing, Has Fins
+                    { new double[] { 0, 1, 1, 1, 1 }, "Tuna" },
+                    { new double[] { 2, 0, 0, 0, 0 }, "Seagull" },
+                    { new double[] { 0, 0, 1, 1, 0 }, "Jelly Fish" },
+                    { new double[] { 0, 1, 1, 0, 0 }, "Burmese Python" },
+                    { new double[] { 4, 1, 1, 0, 0 }, "Nile Crocodile" },
                 };
                 double[][] TestDataInputs = new double[TestData.Keys.Count][];
                 double[][] TestDataOutputs = new double[][]
                 {
-                    new double[]{ 0 },    //Corgi
+                    new double[]{ 0 },    //Tuna
                     new double[]{ 0 },    //Seagull
                     new double[]{ 0 },    //Jelly Fish
                     new double[]{ 1 },    //Burmese Python
@@ -77,26 +81,34 @@ namespace NeuralNetClassificationTest
                 };
                 TestData.Keys.CopyTo(TestDataInputs, 0);
 
-                NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 5, 10, 1);
-                Backpropagation BackpropTrainer = new Backpropagation(randy, ModelNetwork);
-                Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 10);
+                NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 5, 1);
+                Backpropagation BackpropTrainer = new Backpropagation(randy, ModelNetwork, 0.035);
+                Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 250);
                 Console.CursorVisible = false;
                 Console.Clear();
+
+                //Create Timers
+                TimeSpan GeneticsLearnTime = new TimeSpan();
+                TimeSpan BackpropLearnTime = new TimeSpan();
 
                 //Train Both At Least Once
                 double BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
                 GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
 
-                while (BackpropTrainer.EpochCount < FinalEpochGenCount || GeneticsTrainer.GenerationCount < FinalEpochGenCount)
+                while (BackpropLearnTime.TotalMilliseconds < Milliseconds || GeneticsLearnTime.TotalMilliseconds < Milliseconds)
                 {
-                    //Train Neural Networks Only Until It Reaches The Goal Error Amount
-                    if (BackpropTrainer.EpochCount < FinalEpochGenCount)
+                    //Train Neural Networks Only Until It Reaches The Time Limit
+                    if (BackpropLearnTime.TotalMilliseconds < Milliseconds)
                     {
+                        DateTime StartTime = DateTime.Now;
                         BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
+                        BackpropLearnTime += DateTime.Now - StartTime;
                     }
-                    if (GeneticsTrainer.GenerationCount < FinalEpochGenCount)
+                    if (GeneticsLearnTime.TotalMilliseconds < Milliseconds)
                     {
+                        DateTime StartTime = DateTime.Now;
                         GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
+                        GeneticsLearnTime += DateTime.Now - StartTime;
                     }
 
                     //Write Out The Values Of The Backpropagation Neural Network
