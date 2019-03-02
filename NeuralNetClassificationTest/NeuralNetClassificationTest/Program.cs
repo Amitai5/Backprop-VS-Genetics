@@ -28,26 +28,26 @@ namespace NeuralNetClassificationTest
                 Dictionary<double[], string> NewData = new Dictionary<double[], string>
                 {
                     //  Input Format: 
-                    //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing
-                    { new double[] { 0, 1, 1, 1 }, "Tuna" },
-                    { new double[] { 4, 0, 1, 1 }, "Frog" },
-                    { new double[] { 4, 1, 1, 0 }, "Gecko" },
-                    { new double[] { 2, 0, 0, 0 }, "Human" },
-                    { new double[] { 4, 0, 0, 0 }, "Stoat" },
-                    { new double[] { 0, 1, 1, 1 }, "Salmon" },
-                    { new double[] { 5, 0, 1, 1 }, "Starfish" },
-                    { new double[] { 4, 1, 1, 0 }, "Chameleon" },
-                    { new double[] { 2, 1, 1, 0 }, "Sea Turtle" },
-                    { new double[] { 8, 0, 1, 0 }, "Black Widow" },
-                    { new double[] { 4, 1, 1, 0 }, "Komodo Dragon" }
+                    //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing, Lifespan (years)
+                    { new double[] { 0, 1, 1, 1, 30 }, "Tuna" },
+                    { new double[] { 4, 0, 1, 1, 12 }, "Frog" },
+                    { new double[] { 4, 0, 0, 0, 6 }, "Stoat" },
+                    { new double[] { 4, 1, 1, 0, 15 }, "Gecko" },
+                    { new double[] { 2, 0, 0, 0, 79 }, "Human" },
+                    { new double[] { 0, 1, 1, 1, 8 }, "Salmon" },
+                    { new double[] { 5, 0, 1, 1, 35 }, "Starfish" },
+                    { new double[] { 4, 1, 1, 0, 5 }, "Chameleon" },
+                    { new double[] { 2, 1, 1, 0, 80 }, "Sea Turtle" },
+                    { new double[] { 8, 0, 1, 0, 3 }, "Black Widow" },
+                    { new double[] { 4, 1, 1, 0, 30 }, "Komodo Dragon" }
                 };
                 double[] NewDataCorrectOutputs = new double[]
                 {
                     0,    //Tuna
                     0,    //Frog
+                    0,    //Stoat
                     1,    //Gecko
                     0,    //Human
-                    0,    //Stoat
                     0,    //Salmon
                     0,    //Starfish
                     1,    //Chameleon
@@ -60,11 +60,11 @@ namespace NeuralNetClassificationTest
                 {
                     //  Input Format: 
                     //      # of Legs, Has Scales, Is Cold Blooded, Water Breathing
-                    { new double[] { 4, 0, 0, 0 }, "Corgi" },
-                    { new double[] { 2, 0, 0, 0 }, "Seagull" },
-                    { new double[] { 0, 0, 1, 1 }, "Jelly Fish" },
-                    { new double[] { 0, 1, 1, 0 }, "Burmese Python" },
-                    { new double[] { 4, 1, 1, 0 }, "Nile Crocodile" },
+                    { new double[] { 4, 0, 0, 0, 15 }, "Corgi" },
+                    { new double[] { 2, 0, 0, 0, 15 }, "Seagull" },
+                    { new double[] { 0, 0, 1, 1, 30 }, "Jelly Fish" },
+                    { new double[] { 0, 1, 1, 0, 20 }, "Burmese Python" },
+                    { new double[] { 4, 1, 1, 0, 100 }, "Nile Crocodile" },
                 };
                 double[][] TestDataInputs = new double[TestData.Keys.Count][];
                 double[][] TestDataOutputs = new double[][]
@@ -77,8 +77,8 @@ namespace NeuralNetClassificationTest
                 };
                 TestData.Keys.CopyTo(TestDataInputs, 0);
 
-                NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 4, 10, 1);
-                Backpropagation BackpropTrainer = new Backpropagation(ModelNetwork);
+                NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 5, 10, 1);
+                Backpropagation BackpropTrainer = new Backpropagation(randy, ModelNetwork);
                 Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 10);
                 Console.CursorVisible = false;
                 Console.Clear();
