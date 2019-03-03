@@ -19,7 +19,7 @@ namespace NeuralNetClassificationTest
             while (true)
             {
                 //Ask For Amount Of Epocs/Generations
-                Random randy = new Random(18);
+                Random randy = new Random(26);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Train Time (in milliseconds): ");
                 Console.ForegroundColor = ConsoleColor.White;
@@ -157,7 +157,7 @@ namespace NeuralNetClassificationTest
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Backprop Prediction (% Correct): ");
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine((BackpropCorrectQuestions / (double)NewDataCorrectOutputs.Length) * 100);
+                Console.WriteLine(Math.Round(BackpropCorrectQuestions / (double)NewDataCorrectOutputs.Length * 100, 2));
 
                 //Separator
                 Console.ForegroundColor = ConsoleColor.White;
@@ -193,7 +193,7 @@ namespace NeuralNetClassificationTest
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Genetics Prediction (% Correct): ");
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine((GeneticCorrectQuestions / (double)NewDataCorrectOutputs.Length) * 100);
+                Console.WriteLine(Math.Round(GeneticCorrectQuestions / (double)NewDataCorrectOutputs.Length * 100, 2));
 
                 //Allow Me To Read The Data
                 Console.ReadLine();
