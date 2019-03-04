@@ -99,20 +99,20 @@
             series1.BorderWidth = 5;
             series1.ChartArea = "MainArea";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series1.Color = System.Drawing.Color.Blue;
+            series1.Color = System.Drawing.Color.Red;
             series1.EmptyPointStyle.MarkerSize = 10;
             series1.EmptyPointStyle.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series1.Font = new System.Drawing.Font("Times New Roman", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             series1.Legend = "Algorithms";
             series1.LegendText = "Genetics Algorithm";
-            series1.MarkerBorderColor = System.Drawing.Color.Blue;
+            series1.MarkerBorderColor = System.Drawing.Color.Red;
             series1.MarkerSize = 8;
             series1.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series1.Name = "Genetics";
             series2.BorderWidth = 5;
             series2.ChartArea = "MainArea";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series2.Color = System.Drawing.Color.Green;
+            series2.Color = System.Drawing.Color.Blue;
             series2.EmptyPointStyle.MarkerSize = 10;
             series2.EmptyPointStyle.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -125,11 +125,11 @@
             series3.BorderWidth = 3;
             series3.ChartArea = "MainArea";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            series3.Color = System.Drawing.Color.LawnGreen;
             series3.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             series3.Legend = "Algorithms";
             series3.LegendText = "Sine Graph";
-            series3.MarkerSize = 8;
+            series3.MarkerSize = 2;
             series3.Name = "SineGraph";
             series4.ChartArea = "MainArea";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -152,7 +152,7 @@
             // 
             // PredictBTN
             // 
-            this.PredictBTN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.PredictBTN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.PredictBTN.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PredictBTN.Location = new System.Drawing.Point(0, 738);
@@ -165,7 +165,7 @@
             // 
             // DebugInfoBox
             // 
-            this.DebugInfoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.DebugInfoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DebugInfoBox.Font = new System.Drawing.Font("Arial Rounded MT Bold", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DebugInfoBox.Location = new System.Drawing.Point(0, 0);

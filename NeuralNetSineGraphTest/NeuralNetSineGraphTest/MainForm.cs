@@ -20,7 +20,11 @@ namespace NeuralNetSineGraphTest
         double NetworkError = 0;
         Genetics GeneticsTrainer;
         Backpropagation BackpropTrainer;
-        public const double TargetNetworkError = 0.005;
+        public const double TargetNetworkError = 0.01;
+
+        //Training Timers
+        TimeSpan GeneticsTrainingTime = new TimeSpan();
+        TimeSpan BackpropTrainingTime = new TimeSpan();
 
         //Create Test Data
         public double[][] TestDataInputs;
@@ -28,7 +32,8 @@ namespace NeuralNetSineGraphTest
 
         //Background Worker
         bool KeepWorking = true;
-        BackgroundWorker MainWorker = new BackgroundWorker();
+        BackgroundWorker GeneticsWorker = new BackgroundWorker();
+        BackgroundWorker BackpropWorker = new BackgroundWorker();
 
         public MainForm()
         {
@@ -57,6 +62,7 @@ namespace NeuralNetSineGraphTest
                 MainGraph.Series[i].ChartType = SeriesChartType.Line;
                 MainGraph.Series[i].BorderDashStyle = ChartDashStyle.Solid;
             }
+            MainGraph.Series[2].BorderWidth = 2;
 
             //Draw The Second Sine Period
             for (double i = 0; i < GraphDomain * 2; i += StepValue)
@@ -85,8 +91,8 @@ namespace NeuralNetSineGraphTest
             NeuralNetwork ModelNetwork = new NeuralNetwork(new SoftSine(), 1, 20, 1);
 
             //Create Trainers
-            GeneticsTrainer = new Genetics(Rand, ModelNetwork, totalNetCount: 10, mutationRate: 0.05);
-            BackpropTrainer = new Backpropagation(ModelNetwork, 25E-6, 25E-10);
+            GeneticsTrainer = new Genetics(Rand, ModelNetwork, totalNetCount: 250, mutationRate: 0.05);
+            BackpropTrainer = new Backpropagation(Rand, ModelNetwork, 25E-6, 25E-16);
 
             //Init Test Data & Store Time Per Update
             TestDataInputs = new double[TestDataCount][];
@@ -103,23 +109,35 @@ namespace NeuralNetSineGraphTest
             }
 
             //Start Training
-            BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
-            GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
             KeepWorking = true;
 
             //Start The Background Work
-            MainWorker.DoWork += BackgroundWorker_DoWork;
-            MainWorker.RunWorkerAsync();
+            BackpropWorker.DoWork += BackpropWorker_DoWork;
+            GeneticsWorker.DoWork += GeneticsWorker_DoWork;
+            BackpropWorker.RunWorkerAsync();
+            GeneticsWorker.RunWorkerAsync();
         }
-        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+
+        #region Background Workers
+        private void GeneticsWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            //Test Train Epoch
             while (KeepWorking)
             {
+                DateTime GeneticsStartTime = DateTime.Now;
                 GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
-                NetworkError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
+                GeneticsTrainingTime += (DateTime.Now - GeneticsStartTime);
             }
         }
+        private void BackpropWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (KeepWorking)
+            {
+                DateTime BackpropStartTime = DateTime.Now;
+                NetworkError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
+                BackpropTrainingTime += (DateTime.Now - BackpropStartTime);
+            }
+        }
+        #endregion Background Workers
 
         public void UpdateDisplay()
         {
@@ -141,20 +159,20 @@ namespace NeuralNetSineGraphTest
             //Write Genetics Info
             DebugInfoBox.AppendText($"Genetics Algorithm: {Environment.NewLine}");
             DebugInfoBox.Select(0, DebugInfoBox.TextLength);
-            DebugInfoBox.SelectionColor = Color.Blue;
+            DebugInfoBox.SelectionColor = Color.Red;
 
             DebugInfoBox.AppendText($"Best Network Error: {BestNetworkFitness: 0.00000}{Environment.NewLine}");
-            DebugInfoBox.AppendText($"Current Gen: {GeneticsTrainer.GenerationCount}");
+            DebugInfoBox.AppendText($"Training Time: {GeneticsTrainingTime}");
             DebugInfoBox.AppendText($"{Environment.NewLine}{Environment.NewLine}");
 
             //Write Backpropagation Info
             int LastLineIndex = DebugInfoBox.TextLength;
             DebugInfoBox.AppendText($"Backpropagation Algorithm: {Environment.NewLine}");
             DebugInfoBox.Select(LastLineIndex, DebugInfoBox.TextLength);
-            DebugInfoBox.SelectionColor = Color.Green;
+            DebugInfoBox.SelectionColor = Color.Blue;
 
             DebugInfoBox.AppendText($"Network Error: {NetworkError: 0.00000}{Environment.NewLine}");
-            DebugInfoBox.AppendText($"Current Epoch: {BackpropTrainer.EpochCount}");
+            DebugInfoBox.AppendText($"Training Time: {BackpropTrainingTime}");
 
             //Display To Screen
             DebugInfoBox.Update();
