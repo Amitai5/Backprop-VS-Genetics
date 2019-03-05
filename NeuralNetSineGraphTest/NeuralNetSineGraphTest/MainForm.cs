@@ -1,6 +1,4 @@
-﻿using NeuralNetLIB.ActivationFunctions;
-using NeuralNetLIB.LearningAlgorithms;
-using NeuralNetLIB.NetworkStructure;
+﻿using NeuralNetLIB.LearningAlgorithms;
 using System;
 using System.ComponentModel;
 using System.Drawing;

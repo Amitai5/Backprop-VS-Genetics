@@ -4,10 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">
       Release
-      <runtime>
-        <gcServer enabled="true"/>
-      </runtime>
-    </Configuration>
+      <runtime><gcServer enabled="true" /></runtime></Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8DDBC1D2-25BE-4CA8-B69F-5EB3691641FB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -86,8 +83,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NeuralNetLIB\NeuralNetLIB\NeuralNetLIB.csproj">
-      <Project>{0533f627-8987-4a92-b993-31506010d0e3}</Project>
+    <ProjectReference Include="..\..\..\NeuralNetLIB\NeuralNetLIB\NeuralNetLIB.csproj">
+      <Project>{9B2CF829-D9A0-4743-B7EF-D73E0CE5CCB7}</Project>
       <Name>NeuralNetLIB</Name>
     </ProjectReference>
   </ItemGroup>
