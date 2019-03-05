@@ -37,5 +37,5 @@ The goal of this test was to address the accuracy of each learning algorithm giv
 
 ![alt text](https://user-images.githubusercontent.com/8137628/53787977-464e3f00-3ed5-11e9-856b-bc8b74094a2c.png "Reptile Classifictation Graph")
 
-## Acknowledgement
+## Acknowledgements
 A huge thank you to <a href="http://greatmindsrobotics.com/">Great Minds Robotics</a> and <a href="https://github.com/RScopio">Ryan Scopio</a> for their advice/guidance throughout the research project.
