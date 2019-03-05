@@ -22,6 +22,8 @@ Minimum: | 163.9362 | 169.9704 |
 3rd Quartile: | 406.024125 | 335.4027 |
 Maximum: | 647.6394 | 1863.1769 |
 
+---
+
 ### Test 2: Reptile Classification
 The goal of this test was to address the accuracy of each learning algorithm given a limited amount of time. (ADD MORE HERE) The parameters for each learning algorithm are as follows:
 
