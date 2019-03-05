@@ -46,7 +46,7 @@ namespace NeuralNetXORTest
 
             while (true)
             {
-                //Train Backprop Neural Network
+                //Train Backpropagation Neural Network
                 if (BackpropError > NeuralNetworkTargetError)
                 {
                     DateTime StartTime = DateTime.Now;

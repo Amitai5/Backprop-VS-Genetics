@@ -4,7 +4,7 @@
     {
         public override double Derivative(double x)
         {
-            //The Derrivative Value Of The Point In Which You Are AT
+            //The Derivative Value Of The Point In Which You Are AT
             if (x > 1)
             {
                 return 1;

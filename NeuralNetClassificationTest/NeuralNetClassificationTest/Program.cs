@@ -11,6 +11,7 @@ namespace NeuralNetClassificationTest
         static void Main(string[] args)
         {
             //Set Default Appearance Variables
+            Random randy = new Random(26);
             Console.CursorVisible = false;
             Console.SetWindowSize(100, 50);
             Console.SetBufferSize(100, 60);
@@ -18,13 +19,15 @@ namespace NeuralNetClassificationTest
 
             while (true)
             {
-                //Ask For Amount Of Epocs/Generations
-                Random randy = new Random(26);
+                //Ask For Amount Of Epochs/Generations
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("Train Time (in milliseconds): ");
                 Console.ForegroundColor = ConsoleColor.White;
                 int Milliseconds = int.Parse(Console.ReadLine());
+                Console.CursorVisible = false;
+                Console.Clear();
 
+                #region Data Set
                 Dictionary<double[], string> NewData = new Dictionary<double[], string>
                 {
                     //  Input Format: 
@@ -80,21 +83,23 @@ namespace NeuralNetClassificationTest
                     new double[]{ 1 },    //Nile Crocodile
                 };
                 TestData.Keys.CopyTo(TestDataInputs, 0);
+                #endregion Data Set
 
+                //Create Neural Network Structure
                 NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 5, 1);
+
+                //Create Backpropagation Trainer
                 Backpropagation BackpropTrainer = new Backpropagation(randy, ModelNetwork, 0.035);
+                double BackpropError = 1;
+
+                //Create Genetics Trainer
                 Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 250);
-                Console.CursorVisible = false;
-                Console.Clear();
 
                 //Create Timers
                 TimeSpan GeneticsLearnTime = new TimeSpan();
                 TimeSpan BackpropLearnTime = new TimeSpan();
 
-                //Train Both At Least Once
-                double BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
-                GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
-
+                #region Training Loop
                 while (BackpropLearnTime.TotalMilliseconds < Milliseconds || GeneticsLearnTime.TotalMilliseconds < Milliseconds)
                 {
                     //Train Neural Networks Only Until It Reaches The Time Limit
@@ -122,14 +127,17 @@ namespace NeuralNetClassificationTest
                     //Write Out The Values Of The Genetic Neural Network
                     PrintGeneticsHeader(GeneticsTrainer);
                 }
+                #endregion Training Loop
 
                 //Show Results
                 Console.Clear();
                 Console.SetCursorPosition(0, 0);
+
+                #region Printing Backpropagation Results
+
+                //Print Backpropagation Training Data Results
                 PrintBackpropHeader(BackpropTrainer, BackpropError);
                 Console.Write(Environment.NewLine);
-
-                //Print Out The Results of Backprop
                 foreach (KeyValuePair<double[], string> SingleTestData in TestData)
                 {
                     Console.ForegroundColor = ConsoleColor.White;
@@ -137,10 +145,12 @@ namespace NeuralNetClassificationTest
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"{Math.Round(BackpropTrainer.Network.Compute(SingleTestData.Key)[0], 0)}");
                 }
+
+                //Print Separator
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine($"----------New Data----------");
 
-                //Print Backprop New Data
+                //Print Backpropagation Test Data Results
                 int BackpropQuestionIndex = 0;
                 int BackpropCorrectQuestions = 0;
                 foreach (KeyValuePair<double[], string> SingleTestData in NewData)
@@ -155,17 +165,21 @@ namespace NeuralNetClassificationTest
                     BackpropQuestionIndex++;
                 }
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("Backprop Prediction (% Correct): ");
+                Console.Write("Backpropagation Prediction (% Correct): ");
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(Math.Round(BackpropCorrectQuestions / (double)NewDataCorrectOutputs.Length * 100, 2));
 
-                //Separator
+                #endregion Printing Backpropagation Results
+
+                //Learning Algorithm Separator
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"{Environment.NewLine}-------------------------------------{Environment.NewLine}");
                 PrintGeneticsHeader(GeneticsTrainer);
                 Console.Write(Environment.NewLine);
 
-                //Print Out The Results of Genetics
+                #region Printing Genetics Results
+
+                //Print Genetics Training Data Results
                 foreach (KeyValuePair<double[], string> SingleTestData in TestData)
                 {
                     Console.ForegroundColor = ConsoleColor.White;
@@ -176,7 +190,7 @@ namespace NeuralNetClassificationTest
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine($"----------New Data----------");
 
-                //Print The New Data
+                //Print Genetics Test Data Results
                 int GeneticQuestionIndex = 0;
                 int GeneticCorrectQuestions = 0;
                 foreach (KeyValuePair<double[], string> SingleTestData in NewData)
@@ -195,8 +209,10 @@ namespace NeuralNetClassificationTest
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(Math.Round(GeneticCorrectQuestions / (double)NewDataCorrectOutputs.Length * 100, 2));
 
-                //Allow Me To Read The Data
-                Console.ReadLine();
+                #endregion Printing Genetics Results
+
+                //Pause Until Key Press
+                Console.ReadKey();
                 Console.Clear();
             }
         }

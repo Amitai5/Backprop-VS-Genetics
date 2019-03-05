@@ -6,7 +6,7 @@ namespace NeuralNetLIB.ActivationFunctions
     {
         public override double Derivative(double x)
         {
-            //The Derrivative Value Of The Point In Which You Are AT
+            //The Derivative Value Of The Point In Which You Are AT
             return 1 / Math.Pow(1 + Math.Abs(x), 2);
         }
 

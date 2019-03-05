@@ -91,8 +91,8 @@ namespace NeuralNetSineGraphTest
             NeuralNetwork ModelNetwork = new NeuralNetwork(new SoftSine(), 1, 20, 1);
 
             //Create Trainers
-            GeneticsTrainer = new Genetics(Rand, ModelNetwork, totalNetCount: 250, mutationRate: 0.05);
             BackpropTrainer = new Backpropagation(Rand, ModelNetwork, 25E-6, 25E-16);
+            GeneticsTrainer = new Genetics(Rand, ModelNetwork, totalNetCount: 250, mutationRate: 0.05);
 
             //Init Test Data & Store Time Per Update
             TestDataInputs = new double[TestDataCount][];
