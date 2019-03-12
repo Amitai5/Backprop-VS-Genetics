@@ -1,6 +1,8 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
+using NeuralNetLIB.InitializationFunctions;
 using NeuralNetLIB.LearningAlgorithms;
 using NeuralNetLIB.NetworkStructure;
+using NeuralNetLIB.NetworkStructure.NetworkBuilder;
 using System;
 using System.Collections.Generic;
 
@@ -86,10 +88,13 @@ namespace NeuralNetClassificationTest
                 #endregion Data Set
 
                 //Create Neural Network Structure
-                NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 5, 1);
+                NeuralNetwork ModelNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
+                    .CreateInputLayer(5)
+                    .CreateOutputLayer(1, new Sigmoid())
+                    .Build(randy);
 
                 //Create Backpropagation Trainer
-                Backpropagation BackpropTrainer = new Backpropagation(randy, ModelNetwork, 0.035);
+                Backpropagation BackpropTrainer = new Backpropagation(ModelNetwork, 0.035);
                 double BackpropError = 1;
 
                 //Create Genetics Trainer

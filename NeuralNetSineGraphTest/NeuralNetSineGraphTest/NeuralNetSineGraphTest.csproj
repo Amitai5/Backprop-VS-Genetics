@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\NeuralNetLIB\NeuralNetLIB\NeuralNetLIB.csproj">
-      <Project>{9B2CF829-D9A0-4743-B7EF-D73E0CE5CCB7}</Project>
+      <Project>{056d22f5-f9ae-431d-9b20-7243a50f8804}</Project>
       <Name>NeuralNetLIB</Name>
     </ProjectReference>
   </ItemGroup>

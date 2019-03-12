@@ -1,6 +1,8 @@
 ﻿using NeuralNetLIB.ActivationFunctions;
+using NeuralNetLIB.InitializationFunctions;
 using NeuralNetLIB.LearningAlgorithms;
 using NeuralNetLIB.NetworkStructure;
+using NeuralNetLIB.NetworkStructure.NetworkBuilder;
 using System;
 
 namespace NeuralNetXORTest
@@ -11,9 +13,15 @@ namespace NeuralNetXORTest
         {
             //Create Neural Nets
             Random randy = new Random();
-            NeuralNetwork ModelNetwork = new NeuralNetwork(new Sigmoid(), 2, 2, 1);
-            Backpropagation BackpropTrainer = new Backpropagation(randy, ModelNetwork);
-            Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 500);
+            NeuralNetwork XORNeuralNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
+                .CreateInputLayer(2)
+                .AddHiddenLayer(2, new Sigmoid())
+                .CreateOutputLayer(1, new Sigmoid())
+                .Build(randy);
+
+            //Create Trainers
+            Backpropagation BackpropTrainer = new Backpropagation(XORNeuralNetwork);
+            Genetics GeneticsTrainer = new Genetics(randy, XORNeuralNetwork, 500);
 
             //Neural Net Variables
             double NeuralNetworkTargetError = 0.05;

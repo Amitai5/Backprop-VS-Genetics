@@ -1,4 +1,8 @@
-﻿using NeuralNetLIB.LearningAlgorithms;
+﻿using NeuralNetLIB.ActivationFunctions;
+using NeuralNetLIB.InitializationFunctions;
+using NeuralNetLIB.LearningAlgorithms;
+using NeuralNetLIB.NetworkStructure;
+using NeuralNetLIB.NetworkStructure.NetworkBuilder;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -86,11 +90,15 @@ namespace NeuralNetSineGraphTest
 
             //Create Model Network & Random
             Random Rand = new Random();
-            NeuralNetwork ModelNetwork = new NeuralNetwork(new SoftSine(), 1, 20, 1);
+            NeuralNetwork ModelNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
+                .CreateInputLayer(1)
+                .AddHiddenLayer(20, new SoftSine())
+                .CreateOutputLayer(1, new SoftSine())
+                .Build(Rand);
 
             //Create Trainers
-            BackpropTrainer = new Backpropagation(Rand, ModelNetwork, 25E-6, 25E-16);
-            GeneticsTrainer = new Genetics(Rand, ModelNetwork, totalNetCount: 250, mutationRate: 0.05);
+            BackpropTrainer = new Backpropagation(ModelNetwork, 25E-6, 25E-16);
+            GeneticsTrainer = new Genetics(Rand, ModelNetwork, 250, 0.05);
 
             //Init Test Data & Store Time Per Update
             TestDataInputs = new double[TestDataCount][];
