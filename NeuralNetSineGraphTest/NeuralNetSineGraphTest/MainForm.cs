@@ -1,8 +1,8 @@
-﻿using NeuralNetLIB.ActivationFunctions;
-using NeuralNetLIB.InitializationFunctions;
-using NeuralNetLIB.LearningAlgorithms;
-using NeuralNetLIB.NetworkStructure;
-using NeuralNetLIB.NetworkStructure.NetworkBuilder;
+﻿using MachineLearningLIB.ActivationFunctions;
+using MachineLearningLIB.InitializationFunctions;
+using MachineLearningLIB.LearningAlgorithms;
+using MachineLearningLIB.NetworkStructure;
+using MachineLearningLIB.NetworkStructure.NetworkBuilder;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -90,15 +90,21 @@ namespace NeuralNetSineGraphTest
 
             //Create Model Network & Random
             Random Rand = new Random();
-            NeuralNetwork ModelNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
-                .CreateInputLayer(1)
-                .AddHiddenLayer(20, new SoftSine())
-                .CreateOutputLayer(1, new SoftSine())
-                .Build(Rand);
+            NeuralNetwork BackpropNeuralNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
+                                 .CreateInputLayer(1)
+                                 .AddHiddenLayer(20, new SoftSine())
+                                 .CreateOutputLayer(1, new SoftSine())
+                                 .Build(Rand);
+
+            GeneticNeuralNetwork[] GeneticNetworkPopulation = new NeuralNetworkBuilder(InitializationFunction.Random)
+                                .CreateInputLayer(1)
+                                .AddHiddenLayer(20, new SoftSine())
+                                .CreateOutputLayer(1, new SoftSine())
+                                .BuildMany(Rand, 250);
 
             //Create Trainers
-            BackpropTrainer = new Backpropagation(ModelNetwork, 25E-6, 25E-16);
-            GeneticsTrainer = new Genetics(Rand, ModelNetwork, 250, 0.05);
+            GeneticsTrainer = new Genetics(Rand, GeneticNetworkPopulation, 0.05);
+            BackpropTrainer = new Backpropagation(BackpropNeuralNetwork, 25E-6, 25E-16);
 
             //Init Test Data & Store Time Per Update
             TestDataInputs = new double[TestDataCount][];
