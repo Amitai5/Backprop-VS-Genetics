@@ -88,10 +88,12 @@
             chartArea1.Name = "MainArea";
             this.MainGraph.ChartAreas.Add(chartArea1);
             this.MainGraph.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.AutoFitMinFontSize = 12;
+            legend1.Alignment = System.Drawing.StringAlignment.Center;
+            legend1.AutoFitMinFontSize = 24;
             legend1.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            legend1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            legend1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             legend1.IsTextAutoFit = false;
+            legend1.LegendItemOrder = System.Windows.Forms.DataVisualization.Charting.LegendItemOrder.ReversedSeriesOrder;
             legend1.Name = "Algorithms";
             this.MainGraph.Legends.Add(legend1);
             this.MainGraph.Location = new System.Drawing.Point(0, 0);
@@ -152,8 +154,7 @@
             // 
             // PredictBTN
             // 
-            this.PredictBTN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PredictBTN.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.PredictBTN.Font = new System.Drawing.Font("Arial Rounded MT Bold", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PredictBTN.Location = new System.Drawing.Point(0, 738);
             this.PredictBTN.Name = "PredictBTN";
@@ -165,8 +166,7 @@
             // 
             // DebugInfoBox
             // 
-            this.DebugInfoBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DebugInfoBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.DebugInfoBox.Font = new System.Drawing.Font("Arial Rounded MT Bold", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DebugInfoBox.Location = new System.Drawing.Point(0, 0);
             this.DebugInfoBox.Name = "DebugInfoBox";
