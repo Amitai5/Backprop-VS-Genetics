@@ -1,8 +1,8 @@
 ﻿using MachineLearningLIB.ActivationFunctions;
 using MachineLearningLIB.InitializationFunctions;
 using MachineLearningLIB.LearningAlgorithms;
+using MachineLearningLIB.NetworkBuilder;
 using MachineLearningLIB.NetworkStructure;
-using MachineLearningLIB.NetworkStructure.NetworkBuilder;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -14,27 +14,30 @@ namespace NeuralNetSineGraphTest
     public partial class MainForm : Form
     {
         //Set The Constants Of The Graph
-        public const int TestDataCount = 64;
+        public const int TotalDataCount = 128;
         public const double GraphDomain = 4 * Math.PI;
 
         //Neural Network Objects
-        double NetworkError = 0;
-        Genetics GeneticsTrainer;
-        Backpropagation BackpropTrainer;
+        private double NetworkError = 0;
+        private Genetics GeneticsTrainer;
+        private Backpropagation BackpropTrainer;
         public const double TargetNetworkError = 0.01;
 
         //Training Timers
-        TimeSpan GeneticsTrainingTime = new TimeSpan();
-        TimeSpan BackpropTrainingTime = new TimeSpan();
+        private TimeSpan GeneticsTrainingTime = new TimeSpan();
+        private TimeSpan BackpropTrainingTime = new TimeSpan();
 
-        //Create Test Data
+        //Create Test & Training Data
         public double[][] TestDataInputs;
         public double[][] TestDataOutputs;
-
+        public double[][] TotalDataInputs;
+        public double[][] TotalDataOutputs;
+        public double[][] TrainingDataInputs;
+        public double[][] TrainingDataOutputs;
         //Background Worker
-        bool KeepWorking = true;
-        BackgroundWorker GeneticsWorker = new BackgroundWorker();
-        BackgroundWorker BackpropWorker = new BackgroundWorker();
+        private bool KeepWorking = true;
+        private readonly BackgroundWorker GeneticsWorker = new BackgroundWorker();
+        private readonly BackgroundWorker BackpropWorker = new BackgroundWorker();
 
         public MainForm()
         {
@@ -49,37 +52,65 @@ namespace NeuralNetSineGraphTest
 
             //Create Model Network & Random
             Random Rand = new Random(26);
-            NeuralNetwork BackpropNeuralNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
+            NeuralNetwork BackpropNeuralNetwork = NeuralNetworkBuilder.StartBuild()
+                                            .SetInitMethod(InitializationFunction.Random)
                                             .CreateInputLayer(5)
                                             .AddHiddenLayer(20, new SoftSine())
                                             .CreateOutputLayer(1, new SoftSine())
                                             .Build(Rand);
 
-            GeneticNeuralNetwork[] GeneticsNetworkPopulation = new NeuralNetworkBuilder(InitializationFunction.Random)
+            GeneticNeuralNetwork[] GeneticsNetworkPopulation = NeuralNetworkBuilder.StartBuild()
+                                           .SetInitMethod(InitializationFunction.Random)
                                            .CreateInputLayer(5)
                                            .AddHiddenLayer(20, new SoftSine())
                                            .CreateOutputLayer(1, new SoftSine())
-                                           .BuildMany(Rand, 250);
+                                           .BuildMany(Rand, 500);
 
             //Create Trainers
             GeneticsTrainer = new Genetics(Rand, GeneticsNetworkPopulation, 0.025);
-            BackpropTrainer = new Backpropagation(BackpropNeuralNetwork, 25E-5, 25E-16);
+            BackpropTrainer = new Backpropagation(BackpropNeuralNetwork, 4.425E-4, 2.5E-14);
 
-            //Create Test Data & Draw The Model Sine Wave
+            //Get Data Array Counts
+            const int TestDataCount = (int)(TotalDataCount * 0.2);
+            const int TrainingDataCount = TotalDataCount - TestDataCount;
+
+            //Create Total Data Arrays
             TestDataInputs = new double[TestDataCount][];
             TestDataOutputs = new double[TestDataCount][];
-            for (int i = 0; i < TestDataCount; i++)
+            TotalDataInputs = new double[TotalDataCount][];
+            TotalDataOutputs = new double[TotalDataCount][];
+            TrainingDataInputs = new double[TrainingDataCount][];
+            TrainingDataOutputs = new double[TrainingDataCount][];
+
+            //Create All Data
+            for (int i = 0; i < TotalDataCount; i++)
             {
                 //Calculate The Point X-Values
-                double pointXValue = GraphDomain / TestDataCount * i;
-                double previousXValue = GraphDomain / TestDataCount * (i - 1);
-                double previousXValue2 = GraphDomain / TestDataCount * (i - 2);
-                double previousXValue3 = GraphDomain / TestDataCount * (i - 3);
-                double previousXValue4 = GraphDomain / TestDataCount * (i - 4);
+                double pointXValue = GraphDomain / TotalDataCount * i;
+                double previousXValue = GraphDomain / TotalDataCount * (i - 1);
+                double previousXValue2 = GraphDomain / TotalDataCount * (i - 2);
+                double previousXValue3 = GraphDomain / TotalDataCount * (i - 3);
+                double previousXValue4 = GraphDomain / TotalDataCount * (i - 4);
 
-                TestDataInputs[i] = new double[] { previousXValue4, previousXValue3, previousXValue2, previousXValue, pointXValue };
-                TestDataOutputs[i] = new double[] { Math.Sin(previousXValue), Math.Sin(pointXValue) };
-                MainGraph.Series[2].Points.AddXY(pointXValue, TestDataOutputs[i][0]);
+                TotalDataInputs[i] = new double[] { previousXValue4, previousXValue3, previousXValue2, previousXValue, pointXValue };
+                TotalDataOutputs[i] = new double[] { Math.Sin(pointXValue) };
+                MainGraph.Series[2].Points.AddXY(pointXValue, TotalDataOutputs[i][0]);
+            }
+
+            //Assign The Data Into The Test Category
+            for (int j = 0; j < TestDataCount; j++)
+            {
+                int SelectedIndex = Rand.Next(0, TotalDataCount - 1);
+                TestDataInputs[j] = TotalDataInputs[SelectedIndex];
+                TestDataOutputs[j] = TotalDataOutputs[SelectedIndex];
+            }
+
+            //Assign The Data Into The Training Category
+            for (int k = 0; k < TrainingDataCount; k++)
+            {
+                int SelectedIndex = Rand.Next(0, TotalDataCount - 1);
+                TrainingDataInputs[k] = TotalDataInputs[SelectedIndex];
+                TrainingDataOutputs[k] = TotalDataOutputs[SelectedIndex];
             }
 
             //Start Training
@@ -98,7 +129,7 @@ namespace NeuralNetSineGraphTest
             while (KeepWorking)
             {
                 DateTime GeneticsStartTime = DateTime.Now;
-                GeneticsTrainer.TrainGeneration(TestDataInputs, TestDataOutputs);
+                GeneticsTrainer.TrainGeneration(TrainingDataInputs, TrainingDataOutputs);
                 GeneticsTrainingTime += DateTime.Now - GeneticsStartTime;
             }
         }
@@ -107,7 +138,7 @@ namespace NeuralNetSineGraphTest
             while (KeepWorking)
             {
                 DateTime BackpropStartTime = DateTime.Now;
-                NetworkError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
+                NetworkError = BackpropTrainer.TrainEpoch(TrainingDataInputs, TrainingDataOutputs, TestDataInputs, TestDataOutputs);
                 BackpropTrainingTime += DateTime.Now - BackpropStartTime;
             }
         }
@@ -118,11 +149,11 @@ namespace NeuralNetSineGraphTest
             //Draw The Neural Network's Graph
             MainGraph.Series[0].Points.Clear();
             MainGraph.Series[1].Points.Clear();
-            for (int i = 0; i < TestDataCount; i++)
+            for (int i = 0; i < TotalDataCount; i++)
             {
-                double pointXValue = TestDataInputs[i][TestDataInputs[i].Length - 1];
-                MainGraph.Series[1].Points.AddXY(pointXValue, BackpropTrainer.Network.Compute(TestDataInputs[i])[0]);
-                MainGraph.Series[0].Points.AddXY(pointXValue, GeneticsTrainer.BestNetwork.Compute(TestDataInputs[i])[0]);
+                double pointXValue = TotalDataInputs[i][TotalDataInputs[i].Length - 1];
+                MainGraph.Series[1].Points.AddXY(pointXValue, BackpropTrainer.Network.Compute(TotalDataInputs[i])[0]);
+                MainGraph.Series[0].Points.AddXY(pointXValue, GeneticsTrainer.BestNetwork.Compute(TotalDataInputs[i])[0]);
             }
 
             //Get Genetics Fitness
@@ -138,7 +169,7 @@ namespace NeuralNetSineGraphTest
 
             DebugInfoBox.AppendText($"Best Network Error: {BestNetworkFitness: 0.00000}{Environment.NewLine}");
             DebugInfoBox.AppendText($"Training Time: {GeneticsTrainingTime}");
-            DebugInfoBox.AppendText($"{Environment.NewLine}{Environment.NewLine}");
+            DebugInfoBox.AppendText(Environment.NewLine + Environment.NewLine);
 
             //Write Backpropagation Info
             int LastLineIndex = DebugInfoBox.TextLength;
@@ -153,11 +184,11 @@ namespace NeuralNetSineGraphTest
             DebugInfoBox.Update();
 
             //Check The Error
-            if (BackpropTrainer.EpochCount > 10 &&
-                (NetworkError < TargetNetworkError || BestNetworkFitness < TargetNetworkError))
+            if (BackpropTrainer.EpochCount > 10
+                && (NetworkError < TargetNetworkError || BestNetworkFitness < TargetNetworkError))
             {
                 //Automatically Predict Values
-                PredictBTN_Click(this, new EventArgs());
+                PredictBTN_Click(this, EventArgs.Empty);
             }
         }
         private void PredictBTN_Click(object sender, EventArgs e)
@@ -175,21 +206,21 @@ namespace NeuralNetSineGraphTest
             MainGraph.Series[2].Points.Clear();
 
             //Create Prediction Line
-            MainGraph.Series[3].BorderDashStyle = ChartDashStyle.Dash;
-            MainGraph.Series[3].Points.AddXY(GraphDomain, -5);
-            MainGraph.Series[3].Points.AddXY(GraphDomain, 5);
             MainGraph.Series[3].BorderWidth = 8;
+            MainGraph.Series[3].Points.AddXY(GraphDomain, 5);
+            MainGraph.Series[3].Points.AddXY(GraphDomain, -5);
+            MainGraph.Series[3].BorderDashStyle = ChartDashStyle.Dash;
 
             //Draw The Second Sine Period
-            int pedictionDataCount = TestDataCount * 2;
+            const int pedictionDataCount = TotalDataCount * 2;
             for (int i = 0; i < pedictionDataCount; i++)
             {
                 //Calculate The Point X-Values
-                double pointXValue = GraphDomain / TestDataCount * i;
-                double previousXValue = GraphDomain / TestDataCount * (i - 1);
-                double previousXValue2 = GraphDomain / TestDataCount * (i - 2);
-                double previousXValue3 = GraphDomain / TestDataCount * (i - 3);
-                double previousXValue4 = GraphDomain / TestDataCount * (i - 4);
+                double pointXValue = GraphDomain / TotalDataCount * i;
+                double previousXValue = GraphDomain / TotalDataCount * (i - 1);
+                double previousXValue2 = GraphDomain / TotalDataCount * (i - 2);
+                double previousXValue3 = GraphDomain / TotalDataCount * (i - 3);
+                double previousXValue4 = GraphDomain / TotalDataCount * (i - 4);
                 double[] pointNeuralNetworkInput = new double[] { previousXValue4, previousXValue3, previousXValue2, previousXValue, pointXValue };
 
                 //Re-Draw The Main Sine Graph

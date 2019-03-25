@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.106
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeuralNetSineGraphTest", "NeuralNetSineGraphTest\NeuralNetSineGraphTest.csproj", "{8DDBC1D2-25BE-4CA8-B69F-5EB3691641FB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetLIB", "..\..\NeuralNetLIB\NeuralNetLIB\NeuralNetLIB.csproj", "{056D22F5-F9AE-431D-9B20-7243A50F8804}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineLearningLIB", "..\..\MachineLearningLIB\MachineLearningLIB\MachineLearningLIB.csproj", "{F1BD12A9-CF44-4B2C-8C74-8FFA019E933C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{8DDBC1D2-25BE-4CA8-B69F-5EB3691641FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DDBC1D2-25BE-4CA8-B69F-5EB3691641FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DDBC1D2-25BE-4CA8-B69F-5EB3691641FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{056D22F5-F9AE-431D-9B20-7243A50F8804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{056D22F5-F9AE-431D-9B20-7243A50F8804}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{056D22F5-F9AE-431D-9B20-7243A50F8804}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{056D22F5-F9AE-431D-9B20-7243A50F8804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1BD12A9-CF44-4B2C-8C74-8FFA019E933C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1BD12A9-CF44-4B2C-8C74-8FFA019E933C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1BD12A9-CF44-4B2C-8C74-8FFA019E933C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1BD12A9-CF44-4B2C-8C74-8FFA019E933C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
