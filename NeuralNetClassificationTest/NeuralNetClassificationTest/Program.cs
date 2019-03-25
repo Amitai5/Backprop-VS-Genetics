@@ -1,14 +1,14 @@
-﻿using NeuralNetLIB.ActivationFunctions;
-using NeuralNetLIB.InitializationFunctions;
-using NeuralNetLIB.LearningAlgorithms;
-using NeuralNetLIB.NetworkStructure;
-using NeuralNetLIB.NetworkStructure.NetworkBuilder;
+﻿using MachineLearningLIB.ActivationFunctions;
+using MachineLearningLIB.InitializationFunctions;
+using MachineLearningLIB.LearningAlgorithms;
+using MachineLearningLIB.NetworkBuilder;
+using MachineLearningLIB.NetworkStructure;
 using System;
 using System.Collections.Generic;
 
 namespace NeuralNetClassificationTest
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
@@ -87,18 +87,27 @@ namespace NeuralNetClassificationTest
                 TestData.Keys.CopyTo(TestDataInputs, 0);
                 #endregion Data Set
 
-                //Create Neural Network Structure
-                NeuralNetwork ModelNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
+                //Create Neural Network for Backprop
+                NeuralNetwork ModelNetwork = NeuralNetworkBuilder
+                    .StartBuild()
+                    .SetInitMethod(InitializationFunction.Random)
                     .CreateInputLayer(5)
                     .CreateOutputLayer(1, new Sigmoid())
                     .Build(randy);
+
+                GeneticNeuralNetwork[] NetworkPopulation = NeuralNetworkBuilder
+                    .StartBuild()
+                    .SetInitMethod(InitializationFunction.Random)
+                    .CreateInputLayer(5)
+                    .CreateOutputLayer(1, new Sigmoid())
+                    .BuildMany(randy, 500);
 
                 //Create Backpropagation Trainer
                 Backpropagation BackpropTrainer = new Backpropagation(ModelNetwork, 0.035);
                 double BackpropError = 1;
 
                 //Create Genetics Trainer
-                Genetics GeneticsTrainer = new Genetics(randy, ModelNetwork, 250);
+                Genetics GeneticsTrainer = new Genetics(randy, NetworkPopulation);
 
                 //Create Timers
                 TimeSpan GeneticsLearnTime = new TimeSpan();
@@ -111,7 +120,7 @@ namespace NeuralNetClassificationTest
                     if (BackpropLearnTime.TotalMilliseconds < Milliseconds)
                     {
                         DateTime StartTime = DateTime.Now;
-                        BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
+                        BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs, TestDataInputs, TestDataOutputs);
                         BackpropLearnTime += DateTime.Now - StartTime;
                     }
                     if (GeneticsLearnTime.TotalMilliseconds < Milliseconds)

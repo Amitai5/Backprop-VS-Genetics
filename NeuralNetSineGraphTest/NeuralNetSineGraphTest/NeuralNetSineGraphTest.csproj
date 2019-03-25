@@ -83,9 +83,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\NeuralNetLIB\NeuralNetLIB\NeuralNetLIB.csproj">
-      <Project>{056d22f5-f9ae-431d-9b20-7243a50f8804}</Project>
-      <Name>NeuralNetLIB</Name>
+    <ProjectReference Include="..\..\..\MachineLearningLIB\MachineLearningLIB\MachineLearningLIB.csproj">
+      <Project>{f1bd12a9-cf44-4b2c-8c74-8ffa019e933c}</Project>
+      <Name>MachineLearningLIB</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
