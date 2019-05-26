@@ -1,8 +1,8 @@
 ﻿using MachineLearningLIB.ActivationFunctions;
 using MachineLearningLIB.InitializationFunctions;
 using MachineLearningLIB.LearningAlgorithms;
-using MachineLearningLIB.NetworkBuilder;
 using MachineLearningLIB.NetworkStructure;
+using MachineLearningLIB.NetworkStructure.NetworkBuilder;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -52,22 +52,20 @@ namespace NeuralNetSineGraphTest
 
             //Create Model Network & Random
             Random Rand = new Random(26);
-            NeuralNetwork BackpropNeuralNetwork = NeuralNetworkBuilder.StartBuild()
-                                            .SetInitMethod(InitializationFunction.Random)
+            NeuralNetwork BackpropNeuralNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
                                             .CreateInputLayer(5)
                                             .AddHiddenLayer(20, new SoftSine())
                                             .CreateOutputLayer(1, new SoftSine())
                                             .Build(Rand);
 
-            GeneticNeuralNetwork[] GeneticsNetworkPopulation = NeuralNetworkBuilder.StartBuild()
-                                           .SetInitMethod(InitializationFunction.Random)
+            NeuralNetwork GeneticsModelNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
                                            .CreateInputLayer(5)
                                            .AddHiddenLayer(20, new SoftSine())
                                            .CreateOutputLayer(1, new SoftSine())
-                                           .BuildMany(Rand, 500);
+                                           .Build(Rand);
 
             //Create Trainers
-            GeneticsTrainer = new Genetics(Rand, GeneticsNetworkPopulation, 0.025);
+            GeneticsTrainer = new Genetics(Rand, GeneticsModelNetwork, 500, 0.025);
             BackpropTrainer = new Backpropagation(BackpropNeuralNetwork, 4.425E-4, 2.5E-14);
 
             //Get Data Array Counts
@@ -138,7 +136,7 @@ namespace NeuralNetSineGraphTest
             while (KeepWorking)
             {
                 DateTime BackpropStartTime = DateTime.Now;
-                NetworkError = BackpropTrainer.TrainEpoch(TrainingDataInputs, TrainingDataOutputs, TestDataInputs, TestDataOutputs);
+                NetworkError = BackpropTrainer.TrainEpoch(TrainingDataInputs, TrainingDataOutputs);
                 BackpropTrainingTime += DateTime.Now - BackpropStartTime;
             }
         }

@@ -1,7 +1,7 @@
-﻿using MachineLearningLIB.ActivationFunctions;
+﻿using MachineLearningLIB.NetworkStructure.NetworkBuilder;
+using MachineLearningLIB.ActivationFunctions;
 using MachineLearningLIB.InitializationFunctions;
 using MachineLearningLIB.LearningAlgorithms;
-using MachineLearningLIB.NetworkBuilder;
 using MachineLearningLIB.NetworkStructure;
 using System;
 using System.Collections.Generic;
@@ -88,26 +88,22 @@ namespace NeuralNetClassificationTest
                 #endregion Data Set
 
                 //Create Neural Network for Backprop
-                NeuralNetwork ModelNetwork = NeuralNetworkBuilder
-                    .StartBuild()
-                    .SetInitMethod(InitializationFunction.Random)
+                NeuralNetwork ModelNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
                     .CreateInputLayer(5)
                     .CreateOutputLayer(1, new Sigmoid())
                     .Build(randy);
 
-                GeneticNeuralNetwork[] NetworkPopulation = NeuralNetworkBuilder
-                    .StartBuild()
-                    .SetInitMethod(InitializationFunction.Random)
+                NeuralNetwork ModelGeneticNetwork = new NeuralNetworkBuilder(InitializationFunction.Random)
                     .CreateInputLayer(5)
                     .CreateOutputLayer(1, new Sigmoid())
-                    .BuildMany(randy, 500);
+                    .Build(randy);
 
                 //Create Backpropagation Trainer
                 Backpropagation BackpropTrainer = new Backpropagation(ModelNetwork, 0.035);
                 double BackpropError = 1;
 
                 //Create Genetics Trainer
-                Genetics GeneticsTrainer = new Genetics(randy, NetworkPopulation);
+                Genetics GeneticsTrainer = new Genetics(randy, ModelGeneticNetwork, 500);
 
                 //Create Timers
                 TimeSpan GeneticsLearnTime = new TimeSpan();
@@ -120,7 +116,7 @@ namespace NeuralNetClassificationTest
                     if (BackpropLearnTime.TotalMilliseconds < Milliseconds)
                     {
                         DateTime StartTime = DateTime.Now;
-                        BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs, TestDataInputs, TestDataOutputs);
+                        BackpropError = BackpropTrainer.TrainEpoch(TestDataInputs, TestDataOutputs);
                         BackpropLearnTime += DateTime.Now - StartTime;
                     }
                     if (GeneticsLearnTime.TotalMilliseconds < Milliseconds)

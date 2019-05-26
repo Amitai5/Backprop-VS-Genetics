@@ -1,13 +1,13 @@
-﻿using NeuralNetLIB.ActivationFunctions;
-using NeuralNetLIB.InitializationFunctions;
-using NeuralNetLIB.LearningAlgorithms;
-using NeuralNetLIB.NetworkStructure;
-using NeuralNetLIB.NetworkStructure.NetworkBuilder;
+﻿using MachineLearningLIB.ActivationFunctions;
+using MachineLearningLIB.InitializationFunctions;
+using MachineLearningLIB.LearningAlgorithms;
+using MachineLearningLIB.NetworkStructure;
+using MachineLearningLIB.NetworkStructure.NetworkBuilder;
 using System;
 
 namespace NeuralNetXORTest
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {

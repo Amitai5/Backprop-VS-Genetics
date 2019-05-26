@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.106
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetXORTest", "NeuralNetXORTest\NeuralNetXORTest.csproj", "{81461C22-094A-4C89-A98F-A4B563C6E751}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetLIB", "..\..\NeuralNetLIB\NeuralNetLIB\NeuralNetLIB.csproj", "{730CEF88-06DD-4C18-BEF8-7210BEE3067C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineLearningLIB", "..\MachineLearningLIB\MachineLearningLIB.csproj", "{CC53360B-E2EE-4594-89E8-7AC2934C4519}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{81461C22-094A-4C89-A98F-A4B563C6E751}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81461C22-094A-4C89-A98F-A4B563C6E751}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81461C22-094A-4C89-A98F-A4B563C6E751}.Release|Any CPU.Build.0 = Release|Any CPU
-		{730CEF88-06DD-4C18-BEF8-7210BEE3067C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{730CEF88-06DD-4C18-BEF8-7210BEE3067C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{730CEF88-06DD-4C18-BEF8-7210BEE3067C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{730CEF88-06DD-4C18-BEF8-7210BEE3067C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC53360B-E2EE-4594-89E8-7AC2934C4519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC53360B-E2EE-4594-89E8-7AC2934C4519}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC53360B-E2EE-4594-89E8-7AC2934C4519}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC53360B-E2EE-4594-89E8-7AC2934C4519}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

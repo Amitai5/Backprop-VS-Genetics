@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.106
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetClassificationTest", "NeuralNetClassificationTest\NeuralNetClassificationTest.csproj", "{103C7D8A-7A69-415D-8AD6-84FEEC70EEA3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineLearningLIB", "..\..\MachineLearningLIB\MachineLearningLIB\MachineLearningLIB.csproj", "{9E1815E0-CEA5-4F1B-B5CF-48C4238A0600}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MachineLearningLIB", "..\MachineLearningLIB\MachineLearningLIB.csproj", "{CF470E46-1231-479E-B7FE-4B978A75AA72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{103C7D8A-7A69-415D-8AD6-84FEEC70EEA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{103C7D8A-7A69-415D-8AD6-84FEEC70EEA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{103C7D8A-7A69-415D-8AD6-84FEEC70EEA3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E1815E0-CEA5-4F1B-B5CF-48C4238A0600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E1815E0-CEA5-4F1B-B5CF-48C4238A0600}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E1815E0-CEA5-4F1B-B5CF-48C4238A0600}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E1815E0-CEA5-4F1B-B5CF-48C4238A0600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF470E46-1231-479E-B7FE-4B978A75AA72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF470E46-1231-479E-B7FE-4B978A75AA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF470E46-1231-479E-B7FE-4B978A75AA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF470E46-1231-479E-B7FE-4B978A75AA72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

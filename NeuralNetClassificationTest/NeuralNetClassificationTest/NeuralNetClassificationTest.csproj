@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MachineLearningLIB\MachineLearningLIB\MachineLearningLIB.csproj" />
+    <ProjectReference Include="..\..\MachineLearningLIB\MachineLearningLIB.csproj" />
   </ItemGroup>
 
 </Project>
