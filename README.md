@@ -2,7 +2,7 @@
 
 The purpose of this research project was to address the efficiency of the Backpropagation and Genetics learning algorithms when dealing with supervised data. The efficiency of a learning algorithm was determined by both the speed at which the learning algorithm was able to train a Neural Network along with its overall accuracy at the given task.
 
-![Research Presentation](/assets/LearningAlgorithmsPresentation.gif)
+<img src="/assets/LearningAlgorithmsPresentation.gif" alt-text="Research Presentation" width="720">
 
 ## Research Tests
 
