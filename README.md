@@ -2,7 +2,7 @@
 
 The purpose of this research project was to address the efficiency of the Backpropagation and Genetics learning algorithms when dealing with supervised data. The efficiency of a learning algorithm was determined by both the speed at which the learning algorithm was able to train a Neural Network along with its overall accuracy at the given task.
 
-
+![Research Presentation](/assets/LearningAlgorithmsPresentation.gif)
 
 ## Research Tests
 
@@ -37,7 +37,7 @@ The goal of this test was to address the accuracy of each learning algorithm giv
 * Learning rate: 0.035
 * Momentum rate: 0.0125 
 
-![alt text](https://user-images.githubusercontent.com/8137628/53787977-464e3f00-3ed5-11e9-856b-bc8b74094a2c.png "Reptile Classifictation Graph")
+![Reptile Classification Graph](/assets/ReptileClassifictationGraph.png)
 
 ## Acknowledgements
 A huge thank you to <a href="http://greatmindsrobotics.com/">Great Minds Robotics</a> and <a href="https://github.com/RScopio">Ryan Scopio</a> for their advice/guidance throughout the research project.
